@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B0B0D">
 <title>世界书收藏馆</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -201,6 +201,7 @@ body{
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
+  overflow-x:clip;
   transition:background .5s ease,color .5s ease;
 }
 body::before{
@@ -1679,6 +1680,58 @@ kbd.k{display:inline-block;min-width:22px;padding:0 7px;margin:0 2px;border-radi
 .g-link{color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 @media (max-width:600px){.g-cover{padding:34px 24px 22px}.g-title{font-size:28px}.g-nav{padding:10px 24px}.g-body{padding:0 24px 30px}.g-num{font-size:26px;min-width:32px}.g-h h4{font-size:18px}.g-table td:first-child{width:42%}}
 @media (max-width:600px){.m-two{flex-direction:column;gap:0}.list-row{flex-wrap:wrap}.list-row .lr-a{width:100%;justify-content:flex-end}}
+
+/* =====================================================================
+   手机端稳定性修复
+   1) iOS 在输入框字号小于 16px 时，聚焦会自动放大整页，弹窗被「放飞」且缩不回来
+   2) 页面横向被撑宽，导致整个界面左右漂移
+   3) 弹窗高度用 vh，在手机地址栏收放时会超出可视区域
+   ===================================================================== */
+html{
+  max-width:100%;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  touch-action:manipulation;
+}
+body{max-width:100%;overscroll-behavior-x:none}
+img,svg,video,canvas{max-width:100%}
+
+/* 弹窗：不超出屏幕，内部可滚动，背后页面不跟着动 */
+.modal-bg{
+  padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));
+  overscroll-behavior:contain;
+  overflow:hidden;
+}
+.modal{
+  max-width:min(560px,100%);
+  max-height:calc(100vh - 24px);
+  max-height:calc(100dvh - 24px);
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.modal.guide,html[data-theme^="glass"] .modal.guide{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}
+html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
+
+/* 弹出菜单别超出屏幕宽度 */
+.menu-panel,.theme-panel{max-width:calc(100vw - 24px)}
+
+@media(max-width:800px){
+  /* 所有输入控件 16px，iOS 就不会再自动放大 */
+  input,select,textarea,
+  .modal input,.modal select,.modal textarea,
+  .modal textarea,textarea.note-content,
+  .note-content,.search-wrap input,
+  .fr-row input,.combo-name-in,.f-search,.sec-filter,
+  .modal .list-row select,.modal .imp-bulk select,
+  .modal .combo-opts select,.modal .combo-pick select,
+  .ty-row select,.ty-add input{
+    font-size:16px !important;
+  }
+  .modal .cat-row .cat-icon{font-size:16px !important}
+  html[data-theme^="glass"] .modal{padding:24px 18px}
+  .combo-pick select,.modal .combo-name-in{min-width:0}
+}
 </style>
 </head>
 <body>

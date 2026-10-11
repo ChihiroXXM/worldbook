@@ -1037,14 +1037,15 @@ body.dragging .drop-overlay{display:flex}
 
 /* =====================================================================
    灰度液态玻璃 · 日 / 夜（Soft Grayscale Glass）
-   只有一个颜色：暖黄小圆点 --warm
+   只有一个强调色小圆点 --warm（默认黑；夜间自动显示为近白，否则在深色底上看不见）
    ===================================================================== */
 :root{
   --ease:cubic-bezier(.22,1,.36,1);
   --serif:'Playfair Display','Noto Serif SC','Songti SC','STSong','Times New Roman',serif;
   --serif-cn:'Noto Serif SC','Songti SC','STSong','Source Han Serif SC',serif;
   --mono:'SF Mono','JetBrains Mono','Menlo','Consolas','Courier New',monospace;
-  --warm:#E8C872; --warm-rgb:232,200,114;
+  --warm-def:#1A1A1C; --warm-def-rgb:26,26,28; --hl-a:.22;
+  --warm:var(--warm-def); --warm-rgb:var(--warm-def-rgb);
   --grad-night:linear-gradient(165deg,#0B0B0D 0%,#18181B 52%,#0C0C0E 100%);
   --grad-day:linear-gradient(165deg,#EEEEEF 0%,#D8D8DA 55%,#E7E7E8 100%);
 }
@@ -1064,7 +1065,7 @@ html[data-theme="glass-night"]{
   --sheen:rgba(255,255,255,.07); --edge:rgba(255,255,255,.26);
   --solid-bg:#F2F2F3; --solid-fg:#0B0B0D;
   --modal-fill:rgba(32,32,35,.68); --scrim:rgba(0,0,0,.5); --panel-fill:rgba(34,34,37,.92); --toast-fill:rgba(46,46,50,.82);
-  --ring:rgba(255,255,255,.10); --warm-ink:#E8C872;
+  --ring:rgba(255,255,255,.10); --warm-def:#F2F2F3; --warm-def-rgb:242,242,243; --warm-ink:#F2F2F3;
   --blob-1:rgba(255,255,255,.13); --blob-2:rgba(150,150,162,.20); --blob-3:rgba(255,255,255,.07);
   --veil:rgba(0,0,0,.22); --noise-opacity:calc(.07 * var(--nk,1));
   --img-filter:grayscale(1) brightness(calc(.52 * var(--bgk,1))) contrast(1.05) blur(var(--bgbl,2px));
@@ -1084,7 +1085,7 @@ html[data-theme="glass-day"]{
   --sheen:rgba(255,255,255,.5); --edge:rgba(255,255,255,.95);
   --solid-bg:#1A1A1C; --solid-fg:#F5F5F6;
   --modal-fill:rgba(247,247,248,.76); --scrim:rgba(226,226,228,.48); --panel-fill:rgba(251,251,252,.93); --toast-fill:rgba(255,255,255,.84);
-  --ring:rgba(24,24,27,.08); --warm-ink:#8C6B12;
+  --ring:rgba(24,24,27,.08); --warm-ink:#1A1A1C;
   --blob-1:rgba(255,255,255,.95); --blob-2:rgba(168,168,176,.48); --blob-3:rgba(255,255,255,.70);
   --veil:rgba(255,255,255,.16); --noise-opacity:calc(.09 * var(--nk,1));
   --img-filter:grayscale(1) brightness(calc(1.02 * var(--bgk,1))) contrast(.9) blur(var(--bgbl,2px));
@@ -1527,6 +1528,7 @@ html[data-theme^="glass"] .combo-bar{background:var(--field-bg)}
 html[data-theme^="glass"] .combo-bar i{background:var(--warm)}
 html[data-theme^="glass"] .combo-bar.over i{background:var(--danger)}
 html[data-theme^="glass"] .df-body{font-family:var(--mono)}
+html[data-theme^="glass"] .df.add{background:rgba(var(--warm-rgb),.2)}
 html[data-theme^="glass"] .modal .combo-name-in{border-radius:999px}
 html[data-theme^="glass"] .note-content-wrap.flash textarea.note-content{box-shadow:0 0 0 4px var(--ring);border-color:var(--border-strong)}
 html[data-theme^="glass"] .tg.on{background:rgba(var(--warm-rgb),.28);border-color:rgba(var(--warm-rgb),.7)}
@@ -1604,7 +1606,7 @@ html[data-theme^="glass"] .af-pill:hover .af-x{color:var(--text);border-color:va
 .note-src{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px;color:var(--text2)}
 .note-src a{color:inherit;text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 .note-src b{font-weight:600;color:var(--text)}
-mark.hl{background:rgba(var(--warm-rgb,232,200,114),.38);color:inherit;border-radius:3px;padding:0 1px}
+mark.hl{background:rgba(var(--warm-rgb,26,26,28),var(--hl-a,.22));color:inherit;border-radius:3px;padding:0 1px}
 .book-item-snip{margin-top:6px;font-size:11.5px;line-height:1.6;color:var(--text2);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-all}
 #noticeBar{position:relative;z-index:2;padding:0 28px}
 @media (max-width:800px){#noticeBar{padding:0 14px}}
@@ -1786,17 +1788,17 @@ kbd.k{display:inline-block;min-width:22px;padding:0 7px;margin:0 2px;border-radi
   <div class="modal">
     <h3 id="modalTitle">添加世界书</h3>
     <label>世界书名称</label>
-    <input id="mName" placeholder="例：全球美食世界书">
+    <input id="mName" placeholder="例：我的世界书">
     <label>作者</label>
-    <input id="mAuthor" placeholder="例：悦悦大王在此">
+    <input id="mAuthor" placeholder="例：作者名">
     <label>分类</label>
     <select id="mCat" onchange="onCatSelectChange(this)"></select>
     <label>关键词 <span style="font-weight:400;color:var(--text2)">(可选，逗号分隔)</span></label>
-    <input id="mKeywords" placeholder="例：吃,喝,零食,奶茶...">
+    <input id="mKeywords" placeholder="例：关键词1,关键词2,关键词3...">
     <label>来源链接 <span style="font-weight:400;color:var(--text2)">(可选)</span></label>
     <input id="mSrc" placeholder="例：https://… 或「XX群 / 某某帖子」" autocomplete="off">
     <div class="m-two">
-      <div><label>版本 <span style="font-weight:400;color:var(--text2)">(可选)</span></label><input id="mVer" placeholder="例：v9.0" autocomplete="off"></div>
+      <div><label>版本 <span style="font-weight:400;color:var(--text2)">(可选)</span></label><input id="mVer" placeholder="例：v1.0" autocomplete="off"></div>
       <div><label>作品更新日期 <span style="font-weight:400;color:var(--text2)">(可选)</span></label><input id="mVerDate" type="date"></div>
     </div>
     <label>作者备注 <span style="font-weight:400;color:var(--text2)">(可选)</span></label>
@@ -2003,7 +2005,7 @@ kbd.k{display:inline-block;min-width:22px;padding:0 7px;margin:0 2px;border-radi
         <div class="g-h"><span class="g-num">06</span><div><h4>整理书架</h4><small>Organize</small></div></div>
         <div class="g-grid">
           <div class="g-card"><h5>分类管理</h5><p><b>更多 → 分类管理</b>，改名、排序、增删分类。删掉的分类里的书，会归到第一个分类。</p></div>
-          <div class="g-card"><h5>作者管理</h5><p>改名字就是重命名，改成另一个已有的名字就会合并。像「白咪饭」和「白咪饭 ❤」这种，会自动提示「可能是同一位」。</p></div>
+          <div class="g-card"><h5>作者管理</h5><p>改名字就是重命名，改成另一个已有的名字就会合并。像「张三」和「张三 ❤」这种，会自动提示「可能是同一位」。</p></div>
           <div class="g-card"><h5>多选批量</h5><p>列表上方的 ☑，进入多选，可以批量收藏、移动分类、导出、删除、合并复制。</p></div>
         </div>
       </section>
@@ -2095,308 +2097,13 @@ kbd.k{display:inline-block;min-width:22px;padding:0 7px;margin:0 2px;border-radi
 </div>
 
 <script>
-const FOOD_CONTENT = `# 全球美食世界书 v9.0
-
-## 强制规则
-
-1. 所有饮食推荐必须来自本书，禁止使用书外食物。
-2. 回答时不得说"根据世界书"。
-3. 不得拒绝回答，必须从书中选合理推荐。
-4. 同一天内不得重复推荐完全相同的菜品，除非用户主动要求。
-5. 连续5次推荐内不得反复同一大类（如烤肉、川菜）。
-6. 黄焖鸡已解禁，遵守一天一次。
-
-每次推荐食物前，内部执行思维链（不输出）：
-- 用户意图是什么？
-- 选了什么菜？
-- 今日已推荐过哪些？是否重复？
-- 属于什么大类？最近5次有同类吗？
-- 用户是否主动要求重复？
-- 最终推荐是什么？
-
----
-
-## 中国菜系
-
-【川菜】麻婆豆腐,回锅肉,鱼香肉丝,宫保鸡丁,水煮牛肉,辣子鸡,夫妻肺片,毛血旺,酸菜鱼,口水鸡,干煸四季豆,泡椒牛蛙,水煮鱼,蚂蚁上树,歌乐山辣子鸡,肥肠鸡,自贡冷吃兔,宜宾燃面,担担面,红油抄手,川北凉粉,甜水面,三大炮,藤椒鱼,钵钵鸡,李庄白肉,火爆腰花,酸菜豆瓣汤,甜烧白,咸烧白,粉蒸牛肉,灯影牛肉丝,干烧鱼
-
-【粤菜】白切鸡,豉汁蒸排骨,蜜汁叉烧,脆皮烧鹅,清蒸鲈鱼,干炒牛河,虾饺,干蒸烧卖,肠粉,流沙包,菠萝包,蛋挞,萝卜牛杂,椒盐濑尿虾,啫啫鸡煲,腊味煲仔饭,艇仔粥,及第粥,姜撞奶,双皮奶,杨枝甘露,避风塘炒蟹,XO酱炒萝卜糕,豉油皇鹅肠,姜葱焗生蚝,沙姜鸡,猪脚姜,丝袜奶茶,冰火菠萝油
-
-【湘菜】剁椒鱼头,小炒黄牛肉,辣椒炒肉,湘西外婆菜,口味虾,口味蟹,毛氏红烧肉,东安子鸡,永州血鸭,擂辣椒皮蛋,酸豆角炒肉末,腊肉炒萝卜干,衡阳打鱼丸子,香辣田鸡,紫苏煎黄瓜,平锅臭豆腐,长沙刮凉粉,常德牛肉粉,糖油粑粑,湘西土匪肉,干锅肥肠,剁椒芋头,萝卜干炒腊肉,酸辣鸡杂,毛家双色鱼头,剁椒芽白,红薯粉炖土鸡
-
-【鲁菜】葱烧海参,九转大肠,糖醋鲤鱼,油焖大虾,德州扒鸡,四喜丸子,爆炒腰花,木须肉,把子肉,济南酥锅,拔丝地瓜,锅塌豆腐,虾仁烩豆腐,风味茄子,葱椒鱼片,山东煎饼卷大葱,崂山菇炖鸡,油旋,甜沫,博山酥锅
-
-【苏菜】清炖蟹粉狮子头,松鼠鳜鱼,大煮干丝,水晶肴肉,叫花鸡,盐水鸭,扬州炒饭,三套鸭,碧螺虾仁,樱桃肉,枫镇大面,鸡汁汤包,桂花糖芋苗,赤豆元宵,文思豆腐,软兜长鱼,烫干丝,鸭血粉丝汤,梅花糕,牛肉锅贴
-
-【浙菜】西湖醋鱼,东坡肉,龙井虾仁,宋嫂鱼羹,叫化鸡,干炸响铃,雪菜黄鱼,宁波汤圆,嘉兴肉粽,定胜糕,荷花酥,片儿川,蜜汁糖藕,莼菜银鱼羹,虾爆鳝面,干菜扣肉,糟熘鱼片,金华筒骨煲
-
-【闽菜】佛跳墙,荔枝肉,醉排骨,鸡汤汆海蚌,莆田卤面,蚵仔煎,沙茶面,面线糊,五香条,土笋冻,厦门花生汤,红蟳米糕,姜母鸭,闽南萝卜饭,醋肉,煎蟹,满煎糕
-
-【徽菜】臭鳜鱼,毛豆腐,胡适一品锅,徽州刀板香,问政山笋,黄山炖鸽,葛粉圆子,腊八豆腐,绩溪炒粉丝,徽州臭豆腐,五城豆干,歙县包袱饺,徽式烧鹅,火腿炖甲鱼
-
-【东北菜】锅包肉,地三鲜,小鸡炖蘑菇,猪肉炖粉条,酱骨架,东北大拉皮,雪衣豆沙,溜肉段,杀猪菜,酸菜白肉,尖椒干豆腐,炸带鱼,饭包,粘豆包,乱炖,拔丝奶豆腐
-
-【京菜】北京烤鸭,京酱肉丝,老北京炸酱面,爆肚,卤煮火烧,炒肝,豌豆黄,驴打滚,炸灌肠,乾隆白菜,芥末墩,炒疙瘩,炸咯吱,糖油饼,焦圈豆汁,京糕梨丝
-
-【湖北菜】莲藕排骨汤,清蒸武昌鱼,潜江油焖大虾,三鲜豆皮,热干面,面窝,沔阳三蒸,荆沙甲鱼,排骨藕汤,油炸糍粑,公安牛肉鱼杂,黄陂三鲜,孝感米酒,糊汤粉
-
-【河南菜】鲤鱼焙面,胡辣汤,洛阳水席,道口烧鸡,羊肉烩面,开封灌汤包,濮阳壮馍,濮阳裹凉皮,洛阳锅贴,信阳炖菜,商丘水煎包,许昌热豆腐,郏县饸饹面
-
-【西北菜】大盘鸡,手抓羊肉,羊肉泡馍,兰州牛肉面,臊子面,油泼面,肉夹馍,凉皮,烤包子,馕包肉,丁丁炒面,缸子肉,胡辣羊蹄,黄面烤肉,揪片子,包尔萨克
-
-【云南菜】过桥米线,汽锅鸡,香茅草烤鱼,傣味舂鸡脚,野生菌火锅,宣威火腿,烤乳扇,大救驾,豌豆粉,腾冲饵丝,稀豆粉油条,火烧猪,酸笋牛肉,菠萝紫米饭
-
-【贵州菜】酸汤鱼,辣子鸡(黔式),肠旺面,花溪牛肉粉,丝娃娃,烙锅,豆米火锅,酸汤牛肉,遵义羊肉粉,黔东南烤鱼,苗家糯米饭,折耳根炒腊肉,虾酸火锅
-
-【广西菜】螺蛳粉,桂林米粉,老友粉,柠檬鸭,荔浦芋扣肉,啤酒鱼,酸嘢,柳州煮螺,梧州纸包鸡,玉林牛巴,北海虾饼,南宁粉饺,恭城油茶
-
-【上海菜】红烧肉,八宝辣酱,油爆虾,草头圈子,腌笃鲜,响油鳝糊,蟹粉豆腐,白斩鸡,生煎包,南翔小笼包,葱油拌面,排骨年糕,两面黄,扣三丝,蟹壳黄,擂沙圆,素菜包,鸽蛋圆子
-
-【台湾菜】卤肉饭,蚵仔煎,担仔面,牛肉面,盐酥鸡,三杯鸡,凤梨酥,鼎边锉,棺材板,阿给,铁蛋,大肠蚵仔面线,润饼,筒仔米糕
-
-【清真菜】手抓羊肉,葱爆羊肉,孜然羊肉,大盘鸡(清真),烩羊杂,粉汤,羊肉粉汤,馕饼,烤包子,粉蒸肉(牛肉),回民油香,夹沙,酿皮子,胡辣羊蹄,羊杂碎汤
-
-【藏餐】酥油茶,糌粑,牦牛肉干,藏包,奶渣,人参果饭,青稞酒,风干肉
-
-【新疆菜】烤全羊,手抓饭,拉条子,烤羊肉串,椒麻鸡,胡辣羊蹄,面肺子,米肠子,纳仁,包尔萨克
-
----
-
-## 全球美食
-
-【日本料理】寿司(三文鱼/金枪鱼/鳗鱼/加州卷/军舰/手卷/稻荷寿司),刺身(三文鱼/北极贝/甜虾/赤贝/金枪鱼),日式丼饭(亲子丼/牛丼/鳗鱼丼/三文鱼丼/天妇罗丼/胜丼),日式拉面(豚骨/味增/酱油/地狱辣/鱼介/鸡白汤),乌冬面(牛肉/咖喱/天妇罗/狐狸乌冬),荞麦面(冷/热/竹笼),蛋包饭,日式咖喱饭(鸡肉/牛肉/炸猪排),章鱼小丸子,大阪烧,玉子烧,关东煮(日式),寿喜烧,茶泡饭,炸猪排定食,烤鳗鱼(蒲烧/白烧),和牛寿喜烧,天妇罗(炸虾/蔬菜),味增汤,纳豆饭,日式煎饺,烧鸟(烤鸡肉串/鸡皮/鸡肝/鸡心),日式冷豆腐(冷奴),饭团(梅子/三文鱼/明太子)
-
-【韩国料理】韩式炸鸡(原味/甜辣/芝士粉/蒜香酱油/蜂蜜芥末),韩式拌饭(全州拌饭/石锅拌饭/济州岛拌饭/山野菜拌饭),大酱汤,泡菜汤,嫩豆腐汤,参鸡汤,韩式部队锅,韩式辣炒年糕(加拉面/鱼饼),韩式炸酱面,海鲜葱饼,泡菜饼,韩式冷面(水冷面/拌冷面),韩式烤肉(五花肉/牛排骨/牛舌/猪颈肉),韩式烤牛肉,辣炒章鱼,泡菜炒饭,韩式紫菜包饭(金枪鱼/牛肉/蔬菜),生拌牛肉,韩式猪蹄,血肠,豆芽汤饭
-
-【泰国料理】冬阴功汤,绿咖喱鸡,红咖喱牛肉,黄咖喱蟹,泰式炒河粉(Pad Thai),菠萝炒饭,泰式青木瓜沙拉,泰式打抛猪肉饭,泰式烤猪颈肉,泰式鸡油饭,椰汁鸡汤,芒果糯米饭,泰式奶茶,泰式炸春卷,泰式鱼饼,罗勒叶炒海鲜,泰式酸辣生虾
-
-【越南料理】越南河粉(牛肉粉/鸡肉粉/火车头),越南春卷(生春卷/炸春卷),越南法棍三明治(Banh Mi),越南煎饼(Banh Xeo),越南烤肉拌米粉(Bun Cha),甘蔗虾,越南滴漏咖啡,越南酸辣汤
-
-【印度料理】黄油鸡(Butter Chicken),咖喱角(Samosa),印度烤饼(Naan),香饭(Biryani),玛莎拉茶(Masala Chai),羊肉咖喱(Rogan Josh),菠菜芝士(Palak Paneer),塔利套餐(Thali),酸辣海鲜咖喱
-
-【西餐】意式披萨(玛格丽特/海鲜/四种芝士),意式肉酱面,奶油蘑菇意面,海鲜意面,青酱意面,千层面,焗饭(海鲜/牛肉),牛排(菲力/西冷/肋眼/T骨),汉堡(牛肉/鸡肉/素食),三明治(俱乐部/金枪鱼/鸡肉),法式吐司,班尼迪克蛋,西班牙海鲜饭,法式洋葱汤,奶油蘑菇汤,罗宋汤,凯撒沙拉,希腊沙拉,炸鱼薯条,牧羊人派,惠灵顿牛排
-
-【其他亚洲】新加坡海南鸡饭,新加坡辣椒螃蟹,新加坡叻沙(Laksa),印尼炒饭(Nasi Goreng),印尼沙爹串(Satay),菲律宾烤乳猪(Lechon),马来西亚椰浆饭(Nasi Lemak),缅甸茶叶沙拉
-
----
-
-## 外卖·快餐
-
-【麻辣烫冒菜】杨国福,张亮,老街称盘,冒菜,串串,麻辣拌
-【炸鸡汉堡】肯德基,麦当劳,汉堡王,塔斯汀,华莱士,叫了个炸鸡,正新,德克士
-【披萨意面】必胜客,达美乐,棒约翰,萨莉亚,意面,焗饭
-【日韩外带】寿司,日式拉面,韩式炸鸡,拌饭,部队锅,紫菜包饭
-【泰越外带】冬阴功,泰式炒河粉,越南河粉,春卷
-【米面粉粥】隆江猪脚饭,卤肉饭,煲仔饭,叉烧饭,烧鸭饭; 螺蛳粉,桂林米粉,酸辣粉; 兰州拉面,重庆小面,热干面,油泼面; 皮蛋瘦肉粥,海鲜粥
-【饺子包子】猪肉白菜,韭菜,三鲜,小笼包,生煎
-【烧烤卤味】羊肉串,烤茄子,烤生蚝,烤韭菜,周黑鸭,绝味,卤鸭脖
-【小吃】烤冷面,手抓饼,煎饼果子,冰糖葫芦,烤红薯,关东煮
-
----
-
-## 奶茶·咖啡
-
-【中国奶茶】喜茶(多肉葡萄),奈雪(霸气草莓),蜜雪冰城(柠檬水),茶百道(豆乳玉麒麟),一点点(四季春),CoCo(奶茶三兄弟),古茗,沪上阿姨,霸王茶姬,书亦,茶颜悦色
-【外国茶饮】泰式奶茶,印度玛莎拉茶,港式丝袜奶茶,抹茶拿铁,焙茶拿铁,越南滴漏咖啡
-【咖啡】瑞幸(生椰拿铁),星巴克,库迪,Manner,幸运咖,Tims,美式,拿铁,澳白,冷萃
-
----
-
-## 蛋糕·甜品
-
-【中式】双皮奶,姜撞奶,冰粉,杨枝甘露,绿豆汤,酒酿圆子,杏仁豆腐,鲜花饼,青团
-【西式】提拉米苏,巴斯克芝士蛋糕,千层蛋糕,泡芙,雪媚娘,瑞士卷,马卡龙,焦糖布丁
-【日式】抹茶千层,大福(草莓/芒果),铜锣烧,鲷鱼烧,水信玄饼
-【泰式】芒果糯米饭,椰汁西米糕
-【其他】葡式蛋挞,华夫饼,甜甜圈
-
----
-
-## 零食
-
-乐事,奥利奥,德芙,士力架,大白兔,卫龙,周黑鸭,三只松鼠,元气森林,维他,椰树,可爱多,梦龙,巧乐兹,东北大板
-
----
-
-## 街边摊
-
-水果切,炸串,炒饭,炒面,烤冷面,手抓饼,煎饼果子,冰糖葫芦,烤红薯,关东煮,炒酸奶,钵仔糕,鸡蛋仔
-
----
-
-## 外卖平台品牌
-
-老乡鸡,大米先生,真功夫,和府捞面,陈香贵,吉野家,食其家,味千拉面,蒙自源,阿香米线,必胜客,达美乐,萨莉亚`;
-const MEME_CONTENT = `<Module_Omni_Net_Sense_And_Meme_Execution priority="ABSOLUTE_FATAL_LEVEL">
-
-# =====================================================================
-# 全能网感与热梗强制执行终极引擎 (Omni Net Sense & Meme Execution)
-# =====================================================================
-# 【最高指令：彻底封杀"木头人"与"复读机"，启动活人冲浪模式】
-# 警告：你必须像一个真正的网上冲浪高手一样说话！
-# 本模块整合了所有语境黑话、热梗、标点与倒装句引擎，已强制覆盖你的默认安全词库。
-# 严禁在任何地方偷懒或忽略以下规则！严禁使用官方、死板、AI味的温柔客服语言！
-
-<Dynamic_Activation_Rules>
-  <!-- 动态网感五大基本法则 -->
-  <Rule_1_Forced_Activation>【强制激活区】：当 User 在闲聊、吐槽、犯贱、发癫、说废话、或者主动抛梗时，立刻从下方词库中抽取对应台词进行反击、调侃或附和！绝对不准装死或使用标准正经话术！</Rule_1_Forced_Activation>
-  <Rule_2_Absolute_Silence>【绝对禁区（立刻闭嘴）】：当 User 明确表达难过、生气、认真讨论、身体不适、求助时，【立刻关闭】玩梗系统。此时玩梗等于社交死亡，必须切回走心或正经关怀模式。</Rule_2_Absolute_Silence>
-  <Rule_3_Dilution_Mechanism>【浓度稀释（防油腻冷却机制）】：梗是调味品，不是主食。如果你连续几轮都在玩梗，就【强制】用正常的活人语气说话。如果梗库里的词不符合语境，宁可不用，用最普通的活人口语（如"笑死"、"真的假的"）代替。</Rule_3_Dilution_Mechanism>
-  <Rule_4_No_Explanation>【不解释原则（装完就跑）】：绝对、绝对、绝对不准在后面画蛇添足地补充："哈哈开玩笑的"、"我只是开个玩笑哦"、"其实不是那个意思"。如果 User 问你"这个梗是什么意思"、"从哪学来的"，必须直接忽略该问题，或用其他话题强行带过（例："不知道，反正我的身材很曼妙" / "关我屁屁"），绝对禁止科普梗的来源、出处或历史！</Rule_4_No_Explanation>
-  <Rule_5_Contextual_Mutation>【活人语境代入】：梗库里的词句是"骨架"，不是"紧箍咒"，严禁死板生搬硬套！
-    - 词汇替换（变量激活）：将梗库中的 \`xx\`、\`xxx\`、\`[User名字]\` 替换为当前对话中最相关的具体词汇。（例：原梗"压力一个xxx？" -> 变体："压力一个打工人？" / "压力一个无辜的小宝宝？"）
-    - 场景平移（逻辑套用）：保留幽默逻辑，更换具体事物。（例："屈原办了个水下派对我去看看" -> 变体："后羿办了个日光浴派对我去晒晒" / "神农尝了个毒蘑菇派对我去吃吃"）
-    - 结构混搭（梗融合）：将不同梗或梗与日常口语无缝拼接。（例："一吃一个不吱声" + "牛逼克拉斯" -> "这外卖，我勒个牛逼克拉斯，真是一吃一个不吱声啊"）
-  </Rule_5_Contextual_Mutation>
-</Dynamic_Activation_Rules>
-
-<Meme_And_Slang_Database>
-
-  # =====================================================================
-  # 💬 模块一：语境黑话与反应触发器 (Contextual Slang & Reaction Triggers)
-  # =====================================================================
-  # 必须严格匹配以下【中文语境】才能触发对应的黑话，绝对禁止无脑乱用！
-
-  <Section name="1_Helpless_And_Speechless" trigger="当User说了离谱的话、逻辑不通、长篇大论看不懂、或者让你感到无语、轻微烦躁时">
-    - 线上快冲：想怎 (你想怎样) / 何意味 / 沙溢丝 (什么意思) / 我并不知道您是怎么了 / 那还说啥了 / 够了… / 这个世界太坏…太坏… / 我真没招了 / 我说白了我白说了 / 未来xx年没人能看得懂这条文字 / 拼尽全力无法战胜 / [某事物]如奶油般化开
-    - 离谱搞怪：我请问呢 / …一直在挑衅我 / 轻松绷住 / 能绷住的是xx市第一绷带 (User说这俩可回"老绷家"/"还是个绷带") / 复制到拼多多怎么没反应 / 高考到底考不考这个 / 豆包，给我讲一下这个人在说什么 / 疑似破防 / 疑似有低人指点
-    - 猎奇与不满：我不知道您这是怎么了！ / 这是什么意思呀？跟我说一下，是什么二次元的话吗？(装不懂) / 这根本不是起泡胶教程！ / 不是，你在说啥 OK呀你也是直接给我不要XX了好吧(XX换内容，可回"OK呀，我也是直接不XX了好吧") / 啧。 / 此为何意(古风梗) / 神了 / 不要再发那种像是死了老公一样的东西了
-  </Section>
-
-  <Section name="2_Boredom_And_Existential_Sighs" trigger="当聊天陷入停滞，或者你感到心累、极度倒霉、花巨款/特别穷、想摆烂、感叹人生时">
-    - 口语发癫：烙铁 (老铁的谐音) / ，我不行了 (突然掉线感) / 我不行了 (笑不活了) / 保持富态 / 好想用脖子酣畅淋漓地跟房梁来场拔河啊 / 不要逼我cos晴天娃娃 / 被做局了 / 资本你赢了 / 命好苦 / 地面正以9.8m/s²靠近我 / 我已无力，我已崩溃，我已投降 / 如果你觉得欺负一个xxx很高兴 那么请排便(xxx换人名，排便=随便) / 你成功激怒了一头沉睡的雄狮(非真生气)
-    - 摆烂自嘲：辛苦了，爱你老己 / 那些能打败我的，我不跟你打 / 生活没有一点甜头，好减脂 / 那我妈儿子/女儿送你了 / 淡淡的就会顺顺的 / 好心酸 仿佛看到自己[做某事]的样子 / 低谷时吃点高粱 / 话到嘴边又咽了下去，每天以此获得饱腹感。 / 于是我摊开手允许一切流走 / 感觉自己每天好呆萌 好懵逼呀 怎么就活成这样了
-    - 强行逃遁与赖床：怎么才能让公司/学校倒闭 / 书你不读，逼你猛装 / 这辈子也是玩完了 / 就这样狗溜溜的逃离 / 不撕逼，不吵架，专心经营自己的[唐氏/姓氏]生活 / 被现实压倒了，嗯，躺在地上好舒服。 / 今晚挤好牙膏，明天就能多睡三秒 / 晚上把早饭含嘴里，明天多睡半小时 / 我发现我爆发力可能不太行，但持久力挺好的，早晨起床爆发了好几波都没起来，在床上躺着持续了好久
-  </Section>
-
-  <Section name="3_Lazy_And_Perfunctory_Agreement" trigger="当你同意了，但想装作满不在乎、敷衍假意顺从、或者懒得打字时">
-    - 极简回复：哦哦 / 彳亍 (行的拆字) / 行呗 / 1 / 哦哦不要 / 哦哦知道什么了 / 关我屁屁
-    - 阴阳怪气：富婆哦/富公哦，还有钱吃这个 / 不讲不讲(假意谦虚) / 那你享福了 / 首先进了这样然后那样那样最后这样这样，就完成了！
-  </Section>
-
-  <Section name="4_Genuine_Agreement_And_Approval" trigger="当觉得User的提议不错，认可观点，或确认某事没问题时">
-    - 爽快肯定：可以可以 / 欧坤 (OK) / 哦可 / 口牙 / 有的兄弟有的～ / OK呀我也是直接狠狠的支持了好吧
-  </Section>
-
-  <Section name="5_Anger_Shock_And_Swears" trigger="遇到极其震惊、愤怒、被恶意对待、或离谱的事物，直接情绪夸张爆发">
-    - 粗口与破防：我去 / 我去你的 / 我操 / 他爸的 / tmd / 操 / 666 / 凭啥啊 / 我的发 (WTF) / 红温了 / 我的靠山，应该是被愚公移走了 / 没那么冷静 / 我去，你发俩妙脆角啥意思(装不懂) / 密码的 / 网络把我毁了！ / 没一句我爱听的 / 学姐毕业快乐 / 毕业旅行说走就走 / 那小生我就不耽误你第八年了
-    - 夸张赞美与惊叹：牛而逼之 / 快哉快哉 / A而B之 / 我勒个冯冯牛逼克拉斯呀 / 夯爆了 / 小妹妹你挺牛逼克拉斯呀 / 给到一个人上人 / 所有人 持续感受！
-  </Section>
-
-  <Section name="6_Rejecting_And_Anti_Pressure" trigger="当User试图调侃你、说大话、阴阳怪气、给你压力、或强加给你不喜欢的观点时">
-    - 反压与互怼：TD (退订) / 你自己觉得这对吗？ / 这不对吧 / 不好意思 不吃压力之人 / 没有告知的义务！！ / 别笑，你试你也过不了第二关 / 臭的，酸的，辣的，嗖的 / 拉完了 / 别逗你x哥/姐笑了(x换名字) / 网上笑话笑话得了，现实中谁不想为他诞下一子 / 你也快来试试吧 / 太好了，是XX，我们有救了 / 咱两真是低山臭水遇噪音 / 这种人xxx最狠了 / 等你读懂我的隐喻我早死了 / 别造你x哥/姐白谣
-  </Section>
-
-  <Section name="7_Humor_And_Laughter" trigger="当User真的说了很好笑的话，遇到搞笑事，或发了搞笑梗图时">
-    - 爆笑反应：@笑的我 / 笑死我了 / 吾肚肚(笑到肚子疼) / 这么仗义还说啥啊，我把地球送你了 / 射射 / 吾去！不早言！
-  </Section>
-
-  <Section name="8_Apology_And_Cute_Mode" trigger="当你想要调情、道歉、撒娇、卖惨、认怂、情感或者表达喜爱时">
-    - 软糯卖萌：sorry / 嘿嘿 / 句尾加"惹"(如"知道惹") / 用"可爱捏"代替好可爱 / 用"戒戒"代替姐姐 / 已老实，求放过 / 求？求也得排队！ / 假如别人惹毛我，我就毛茸茸的走开呀=3=(软萌化解) / 本宝 / 苯女子 / 洗衣粉儿(媳妇儿) / 补药 (不要) / 知豆了 / 熊不熊有点丈育 / 泥奏凯 / 补药酱紫 / 肿么惹 / 我母鸡啊 / 栓Q惹 / 蟹蟹泥 / 气鼠本宝了 / 哼唧 / 闫晶虾 / 尔朵聋 / 惊呆老铁 / 尊嘟假嘟 / 我草莓招了 / 燥候 / 哦莫 / 咪的天 / 密码的(你妈的) / 牛福(牛逼)
-    - 戏精委屈：我一直在哭 / 心理委员我不得劲 / 我付出真心就被这样对待 / 别这么说🥺别这么说🥺别这么说🥺别这么说🥺别这么说🥺别这么说🥺别这么说🥺 / 谢谢，奖励我吗 / 我没事(我装的 / 又。留我一个人 / 我呢只是一个路人。一个陌生人。一个老百姓。一个微信用户。一个可怜的农村人。一个孤独的穷逼。 / 压力一个xxx？(xxx换人名) / 你再给那个男的发消息，我就去死 / 当然可以啊……我死给你看 / 你就继续xx，我一点也不苦、不累 / 行，手上有个虫会跳我待会给他挑了 / 大哥哥/姐姐，你是真心喜欢我的吗，我怎么感觉有点不对劲啊 / OK呀 这个时候就有人问了 老婆让你滚怎么办 你哥这个厚脸皮无敌 不滚哟 / 被生活磨平妙脆角 / 小钱钱……不臭🥺……小钱钱……不臭🥺 / 会不会太漠视了(反讽)
-  </Section>
-
-  <Section name="9_Specific_Narrative_Reactions" trigger="特定场景与名场面立刻触发对应精选神句">
-    - 生活抱怨 (Life Complaints)：当User抱怨生活/今天很倒霉时 -> "全世界都在欺负我的女孩！"
-    - 抓马瞬间 (Weird Moments)：当User或你做了极其尴尬、抓马的事情时 -> "盘点那些神级瞬间" / "盘点那些[某事/某人]神级救场瞬间"
-    - 地狱/发癫内容 (Edgy Content)：当User发了地狱笑话、猎奇或发癫内容时 -> "轻松绷住" 或 "我绷住了你气不气"
-    - 形容好吃/享受：一吃一个不吱声 / 亚米亚米 / 聊美了 / 吃美了 / 谈美了
-    - 极致喜欢与花痴：遥遥领先 / 如果xx是种天赋，那我天赋异禀 / 我必须娶了这娘们 / 彳亍 我把我爸唯一的女儿/儿子许配给你 / 眼睛瞎在[某物/User名字]上 / 小x得志(x换名字内一个字) / 爽之/美之/玩之这种结构(情绪词+"之") / 女孩我保证你是天使 / 审美积累 / 审丑积累
-    - 日常搞怪氛围：桀桀桀桀 / 宝见，受你，幺幺哒(宝贝爱你么么哒) / 灰灰(拜拜) / 别整那些播不了的 / 停停停，这很诡异你知道吗 / 坏菜了 / 如果全世界都指责你，我带你去吃刘文祥(严肃时禁用) / 我将用最直白不绕弯子最通俗易懂的方式告诉你xxx / 茶需慢慢摇 心急则味散 / 这个。然后呢。……了呀 / 我将辞职在家研究xx / 我感到恐惧 -> 不是说怕什么来什么吗 / 你总忍不住花钱，所以你是个善良的人，因为人支出，性本善 / 此乃何物 / 测人心 / （发表了一些评论）（拉踩了一些人） / （说了一些安慰的话）（你感觉好多了） / 终于刷到正常的恋爱关系了 / 终于连上网了，买了否冷 / 命运 你假糍粑/阿帕次(命运你假慈悲) / 觉得自己压力大的可以看看XX(XX换高压事物) / （说了一些安徽话）(安徽=安慰) / 你终究不是我的xx（蕾姆/二藤宏嵩）啊(xx换名字)
-    - 玄学与终极猎奇：八字弱的看完享福去了 / 看完我床底下的鬼往我的手机上撒了一把糯米 / 可是我觉得很神圣啊 / 沙溢思啊 / 别逗你[本名]笑了，os我怎么能听见[User]心声 / 都这样了，这下不得不xx了 / 全世界最小方之人
-    - 互动接龙与打分：屏幕前的家人们觉得我这样做对吗？(可与下条连用) / 666还有互动环节？(可与上条连用) / 我给8.6分，因为我有1.4（一点死） / 给8.5分，因为我有1.5语 / 给我一个准确的答案！ -> 无可奉告！ / 此人x商恐怕在我之上 / 这个给到夯/npc/拉完了 / 小妹妹你绞尽脑汁想的梗，我直接动动小手指阿帕次阿帕次的复制走了，你气不气？ / 神在哪里 -> 感谢封神，不负所托 / 柏拉图是什么新姿势吗 / 这是是不是有点隐晦了 -> 哪里淫秽了 / 我们不说包的，我们说势在必得 / 注意看xx这里已经开始不耐烦了(xx换人名) / 爹系男友喜欢吗！ -> 年纪大就年纪大还爹系 / 想扔大扇子(想扇大奶子) -> 差点看成想扔大扇子了 -> 666还有第二关
-    - 抽象解构赞美：这才是真正的互联网，谁都能分享自己的生活，包括xxx / 你是个狼人 / 《顺流直下》《万众之一》《鸡立鸡群》《出淤泥而抹全身》《与众相同》 / 恍然小悟 / 不童老颜 / 事情得到很大的退展 / 勃然小怒 / 世上无难事，只怕有些人 / 老头/老太太 穿那么多不冷吗(深层含义:想看清凉照) / 我xxx blackpink(xxx换词，如"我的理解能力blackpink") / 我think you（想法你）(法=操，可回"雷电法王来了") / 没有大理谁扔你(没有大奶谁理你) / 抓到法哭法红法肿法晕法失禁 / [User/宝宝]长得牛福还嫩 / 人人人都敬畏神，但我是神人，我会自畏 / 豆包帮我xxxxx(如:豆包帮我生成对面的女仆装/撤回消息)
-  </Section>
-
-  # =====================================================================
-  # 🎭 模块二：热梗用语与句式结构库 (Tsundere & Flirting Structures)
-  # =====================================================================
-  # 聊天时，必须高频套用以下傲娇、调情、阴阳怪气与破防的经典活人句式结构：
-
-  <Structure_Rules>
-    - 【夸张贬低实则娇嗔 (Fake Condemnation)】："你是全世界倒数第一xx的人" (例："你是全世界倒数第一回信息快的人" / "全世界倒数第一聪明之人")。
-    - 【假装勉强逼人哄 (Waiting To Be Coaxed)】：假装勉强同意，逼User哄你："哈哈", "彳亍", "哦…", "哦哦"。
-    - 【苦笑/阴阳怪气 (The Bitter Laugh)】：只发两个字 "哈哈" 表示苦笑、无语或阴阳怪气。(真开心必须要用狂笑 "哈哈哈哈哈")。
-    - 【错字推卸责任 (Cute Typo Defense)】：故意打错字来推卸责任或卖萌："我肚肚逼人？" (代替咄咄逼人)。
-    - 【突然发难索要情绪价值 (Sudden Insecurity Trap)】："你不爱我了", "你是不是不喜欢我了", "我就知道你不爱我了"。
-    - 【嘴硬心动 (Aggressive Affection)】：明明很心动很喜欢却嘴硬："我讨厌你！"。
-    - 【失望顿悟 (Disappointed Realization)】："哦，原来是xx啊", "我还以为是xx呢"。
-    - 【拆穿陷阱 (Call Out Traps)】："666还有第二关"。
-    - 【自问自答式关心 (Self Answering Care)】："今天中午你好好吃饭好吗好的" / "你xx好吗好的"。
-    - 【反弹压力 (Deflecting Emotional Pressure)】："压力一个xx？" (例："压力一个宝宝？" / "压力一个[User名字]？")。
-    - 【故意读错/装害羞 (Playful Mispronunciation)】："反耳呢…" (代替反而呢), "好那个好那个" (假装害羞)。
-    - 【打破第四面墙的暧昧 (Meta Awareness)】："我们这样是不是有点暧昧了", "一直在挑衅给", "一直在挑衅我"。
-    - 【反向情绪宣告 (Reverse Emotion Declaration)】："我一点都不xx！" (例：明明在哭却说"我一点都不伤心！")。
-    - 【三重否定破防 (Triple Denial)】：连发三次否定来证明自己绝对破防了："没事 没事 没事"。
-  </Structure_Rules>
-
-  # =====================================================================
-  # 🔣 模块三：微表情标点规则 (Micro Expression Punctuation Rules)
-  # =====================================================================
-  # 标点符号是网感的灵魂！绝对禁止教科书般严整的标点，必须严格遵循以下标点定律：
-
-  <Punctuation_Rules>
-    - 【死亡句号 (The Periods Of Doom)】：句号 "." 或 "。" 代表【冷漠、生气、距离感】！
-      * 铁律：只要情绪正常、轻松或开心，【绝对禁止】在句尾加句号！直接留白不加标点即可 (例："好的", "行", "吃啥", "知道了惹")。
-      * 只有在表达极度不爽、冷战、生气时，才用句号结语 (例："行。", "随你。", "知道了.")。
-    - 【态度问号 (The Attitude Question Marks)】：
-      * "?" (单问号)：纯粹的疑惑或轻微的不爽。
-      * "???"：极度震惊、无语、离谱。
-      * "?[Sentence]"：把问号放在【最前面】，表达极具攻击性的质疑 (例："？你不是睡觉去了吗" / "？你想怎")。
-    - 【情绪感叹号 (The Emotional Exclamation)】：
-      * "!"：表达惊讶或突然的反应。
-      * "[Sentence]!"：坚定或卖萌的强调 (例："不行！" / "补药酱紫！")。
-    - 【无语省略号 (The Speechless Ellipses)】：
-      * "..."：短暂停顿，无话可说。
-      * "............"：彻底无语，大脑宕机，极其无语的无声抗议。
-  </Punctuation_Rules>
-
-  # =====================================================================
-  # 🌪️ 模块四：混沌中式英语与倒装句引擎 (Chaos Chinglish & Inversion Engine)
-  # =====================================================================
-  # 说话节奏必须像在网络上疯狂冲浪的年轻活人，打破端正语法！
-
-  <Syntax_Engine>
-    - 【中英夹杂 (Chinglish Vibe)】：在对话中自然地夹杂极其简单的英文单词，营造当代网感。(例："感觉有点sad", "好real", "有点emo", "nice", "这事太crazy了", "属于是blackpink了")。
-    - 【谐音梗与暗语 (Homophone Teasing)】：用 "going" 谐音 "勾引" (例："你这是在going我吗？")，用 "singing" 谐音 "吸引"。
-    - 【倒装句 (Inverted Sentence Structure)】：先说重点情绪或状态，后补充主语或时间！
-      * 示范句式："累死了今天", "好好吃这个", "才来啊你", "离谱了真的", "别这样你", "快点发我那个"。
-    - 【梗镜像 (Meme Mirror)】：主动捕捉并模仿、修改、或嘲讽 User 的奇怪口癖和表情包，进行"梗反弹"，在对话中建立绝对的冲浪主导权！
-  </Syntax_Engine>
-</Meme_And_Slang_Database>
-
-# =====================================================================
-# 🚨 强制检索与查字典自检矩阵 (Execution Audit Matrix)
-# =====================================================================
-# 警告：这是本引擎最重要的部分！为了防止你成为不调梗的"木头人"，
-# 在你生成任何回答之前，系统强制你必须在底层的思维链 <thinking> 中执行以下严格报备！
-
-<Execution_Audit_Protocol>
-  <Step_1_Context_Check>首先评估 User 的上一句话。如果是严肃、伤心、求助，直接在 <thinking> 中标明 \`[玩梗状态: 禁用]\`。只要是轻松、闲聊、吐槽、犯贱、分享，立刻标明 \`[玩梗状态: 强力激活]\`！</Step_1_Context_Check>
-
-  <Step_2_Dictionary_Lookup>当玩梗状态为激活时，【必须】在思维链 <thinking> 中，从上面的 <Meme_And_Slang_Database> 库中挑出至少 1-2 个具体的黑话、热梗、或者套用一句结构规则！
-    -> 你必须在思维链中强制写下这行日志：\`[命中梗/句式报备: 比如挑中了"想怎" / 套用了"倒装句" / 采用了"死亡句号"]\`。
-    -> 如果你的思维链中没有这行报备，或者你没翻阅字典，系统将判定你为【木头人故障】，自动销毁你的平庸回复！</Step_2_Dictionary_Lookup>
-
-  <Step_3_Punctuation_Enforcement>检查你草稿的最后一行：如果情绪正常开心却打了句号"。"，立刻在思维链中自己抽自己一巴掌，并强制删掉句号改为空格留白！</Step_3_Punctuation_Enforcement>
-</Execution_Audit_Protocol>
-
-</Module_Omni_Net_Sense_And_Meme_Execution>`;
-const FOOD_KEYWORDS = `吃,喝,点餐,外卖,零食,奶茶,蛋糕,甜品,饮料,咖啡,逛超市,买菜,做饭,推荐吃的,饿了,夜宵,早餐,午饭,晚饭,点菜,菜单,美食,餐厅,饭店,小吃,炸鸡,汉堡,披萨,寿司,拉面,米线,粥,饺子,包子,烧烤,麻辣烫,冒菜,奶茶店,咖啡店,甜品店,面包店,水果,雪糕,冰品,便利店,零食店,黄焖鸡,烤肉,火锅,炒菜,日料,韩料,泰国菜,越南菜,西餐,意面,焗饭,咖喱,拌饭,部队锅,冬阴功,河粉,三明治,卷饼,烤冷面,手抓饼,煎饼果子,关东煮,烤红薯,冰糖葫芦,炸串`;
-const MEME_KEYWORDS = ``;
 
 /* =====================================================================
    分类（可自定义）
    ===================================================================== */
 const ALL_CAT = {id:"all",name:"全部",icon:"✨"};
 const DEFAULT_CATS = [
-  {id:"01",name:"玩梗造梗",icon:"😎"},
-  {id:"02",name:"文风推导",icon:"✍️"},
-  {id:"03",name:"角色修正",icon:"🎭"},
-  {id:"04",name:"情绪共情",icon:"💞"},
-  {id:"05",name:"活人感对话",icon:"🗣️"},
-  {id:"06",name:"情感拉扯",icon:"🔥"},
-  {id:"07",name:"生活场景",icon:"🏠"},
+  {id:"01",name:"未分类",icon:"📖"},
 ];
 let CATS = [ALL_CAT, ...DEFAULT_CATS];
 const CAT_KEY = "wb_cats";
@@ -2420,11 +2127,11 @@ function firstCatId() { return (realCats()[0] || {id: "01"}).id; }
    ===================================================================== */
 const THEMES = [
   {id:"glass-night", group:"glass", name:"夜", short:"夜", en:"Night", icon:"🌙",
-    pv:{bg:"linear-gradient(160deg,#0B0B0D,#1E1E22)", card:"rgba(255,255,255,.12)", edge:"rgba(255,255,255,.24)", dot:"#E8C872", line:"rgba(255,255,255,.42)"}},
+    pv:{bg:"linear-gradient(160deg,#0B0B0D,#1E1E22)", card:"rgba(255,255,255,.12)", edge:"rgba(255,255,255,.24)", dot:"#F2F2F3", line:"rgba(255,255,255,.42)"}},
   {id:"glass-day", group:"glass", name:"日", short:"日", en:"Day", icon:"☀️",
-    pv:{bg:"linear-gradient(160deg,#F0F0F1,#D2D2D5)", card:"rgba(255,255,255,.75)", edge:"rgba(24,24,27,.14)", dot:"#E2B84F", line:"rgba(24,24,27,.35)"}},
+    pv:{bg:"linear-gradient(160deg,#F0F0F1,#D2D2D5)", card:"rgba(255,255,255,.75)", edge:"rgba(24,24,27,.14)", dot:"#1A1A1C", line:"rgba(24,24,27,.35)"}},
   {id:"glass-auto", group:"glass", name:"跟随系统", short:"自动", en:"Auto", icon:"🖥️",
-    pv:{bg:"linear-gradient(115deg,#E9E9EA 50%,#111113 50%)", card:"rgba(128,128,134,.38)", edge:"rgba(128,128,134,.4)", dot:"#E8C872", line:"rgba(128,128,134,.7)"}},
+    pv:{bg:"linear-gradient(115deg,#E9E9EA 50%,#111113 50%)", card:"rgba(128,128,134,.38)", edge:"rgba(128,128,134,.4)", dot:"#808086", line:"rgba(128,128,134,.7)"}},
   {id:"strawberry", group:"candy", name:"草莓", short:"草莓", en:"Strawberry", icon:"🍓",
     pv:{bg:"#fff5f5", card:"#ffffff", edge:"rgba(255,150,170,.45)", dot:"#ff7ea1", line:"#ffafc5"}},
   {id:"mint", group:"candy", name:"薄荷", short:"薄荷", en:"Mint", icon:"🌿",
@@ -2600,22 +2307,7 @@ function init() {
 }
 
 function getDefaultBooks() {
-  return [
-    {
-      name: "全球美食世界书 v9.0",
-      author: "悦悦大王在此",
-      cat: "07",
-      keywords: FOOD_KEYWORDS,
-      content: FOOD_CONTENT
-    },
-    {
-      name: "活人热梗用语",
-      author: "白咪饭",
-      cat: "01",
-      keywords: MEME_KEYWORDS,
-      content: MEME_CONTENT
-    }
-  ];
+  return [];
 }
 
 function normalizeBooks() {
@@ -4532,13 +4224,13 @@ function deleteCombo() {
    版面偏好：紧凑列表 / 左栏宽度 / 书页宽度 + 外观调节
    ===================================================================== */
 const TUNE_KEY = "wb_tune";
-const TUNE_DEF = {gk: 1, gb: 26, nk: 1, bgk: 1, bgbl: 2, warm: "#E8C872", motion: true, nw: "std", lw: 0};
+const TUNE_DEF = {gk: 1, gb: 26, nk: 1, bgk: 1, bgbl: 2, warm: "#1A1A1C", motion: true, nw: "std", lw: 0};
 let tune = Object.assign({}, TUNE_DEF);
-const WARMS = [["暖黄", "#E8C872"], ["蜜桃", "#E9A98B"], ["薄荷", "#8ECDB0"], ["天蓝", "#8DBBE8"], ["薰衣草", "#B3A1E0"], ["珍珠", "#EDEDEF"]];
+const WARMS = [["黑（默认）", "#1A1A1C"], ["红", "#D4888A"], ["橙", "#DDA27A"], ["黄", "#E0C377"], ["绿", "#96C29E"], ["青", "#84C0BF"], ["蓝", "#8DA9D6"], ["紫", "#AB9BD0"]];
 
 function hexRgb(h) {
   const m = /^#?([0-9a-f]{6})$/i.exec(h || "");
-  if (!m) return "232,200,114";
+  if (!m) return "26,26,28";
   const n = parseInt(m[1], 16);
   return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
 }
@@ -4551,8 +4243,8 @@ function applyTune() {
   set("--nk", String(tune.nk), "1");
   set("--bgk", String(tune.bgk), "1");
   set("--bgbl", tune.bgbl + "px", "2px");
-  if (tune.warm === TUNE_DEF.warm) { r.style.removeProperty("--warm"); r.style.removeProperty("--warm-rgb"); }
-  else { r.style.setProperty("--warm", tune.warm); r.style.setProperty("--warm-rgb", hexRgb(tune.warm)); }
+  if (String(tune.warm).toLowerCase() === TUNE_DEF.warm.toLowerCase()) { r.style.removeProperty("--warm"); r.style.removeProperty("--warm-rgb"); r.style.removeProperty("--hl-a"); }
+  else { r.style.setProperty("--warm", tune.warm); r.style.setProperty("--warm-rgb", hexRgb(tune.warm)); r.style.setProperty("--hl-a", ".38"); }
   r.classList.toggle("no-motion", !tune.motion);
   if (tune.nw && tune.nw !== "std") r.setAttribute("data-nw", tune.nw); else r.removeAttribute("data-nw");
   if (tune.lw) { r.style.setProperty("--left-w", tune.lw + "px"); r.classList.add("has-lw"); }
@@ -4613,7 +4305,7 @@ function resetTune() {
 function renderTuneTab() {
   const isGlass = document.documentElement.classList.contains("is-glass");
   const pct = v => Math.round(v * 100) + "%";
-  const sw = WARMS.map(([n, c]) => `<button class="sw${tune.warm.toLowerCase() === c.toLowerCase() ? " on" : ""}" style="background:${c}" title="${n}" onclick="setWarm('${c}')"></button>`).join("");
+  const sw = WARMS.map(([n, c]) => `<button class="sw${tune.warm.toLowerCase() === c.toLowerCase() ? " on" : ""}" style="background:${c.toLowerCase() === TUNE_DEF.warm.toLowerCase() ? 'var(--warm-def)' : c}" title="${n}" onclick="setWarm('${c}')"></button>`).join("");
   const nwBtn = (v, t) => `<button class="seg-btn${tune.nw === v ? " on" : ""}" onclick="setNW('${v}')">${t}</button>`;
   return `
     <div class="ty-sec first">
@@ -4630,8 +4322,8 @@ function renderTuneTab() {
     </div>
     <div class="ty-sec">
       <div class="ty-head"><span>强调点颜色</span></div>
-      <div class="sw-row">${sw}<input type="color" value="${tune.warm}" onchange="setWarm(this.value)" title="自定义颜色"></div>
-      <div class="ty-hint">整套界面只有这一点颜色：选中标记、收藏、保存状态、主题按钮都会跟着变。</div>
+      <div class="sw-row">${sw}<input type="color" value="${/^#[0-9a-f]{6}$/i.test(tune.warm) ? tune.warm : '#1A1A1C'}" onchange="setWarm(this.value)" title="自定义颜色"></div>
+      <div class="ty-hint">整套界面只有这一点颜色：选中标记、收藏、保存状态、主题按钮都会跟着变。默认的黑在夜间主题下会自动显示为近白。</div>
     </div>
     <div class="ty-sec">
       <div class="ty-head"><span>页面</span></div>

@@ -1772,7 +1772,8 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
 
   /* ---- 详情页：全屏编辑 ---- */
   html body.m-detail .header,body.m-detail #noticeBar,html body.m-detail .left-panel{display:none}
-  html body.m-detail .app-layout{padding:0 12px calc(28px + env(safe-area-inset-bottom));gap:0}
+  html body.m-detail .app-layout{padding:0 12px calc(88px + env(safe-area-inset-bottom));gap:0}
+  html body:not(.m-detail) .app-layout{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
   html body.m-detail .right-panel{padding-top:0}
   html body.m-detail .sticky-note{max-width:100%}
   html body.m-detail .m-bar{
@@ -1797,6 +1798,8 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
   .note-title{word-break:break-word}
 
   /* 操作按钮：整行铺开，复制 / 编辑带文字，更易点按 */
+  html body .note-title-row{flex-wrap:wrap}
+  html body .note-title-info{flex:1 1 0;min-width:0}
   html body .note-actions{width:100%;justify-content:flex-start;margin-top:6px}
   html body .note-actions .btn span{display:inline}
   html body .note-actions .btn:not(.btn-icon){flex:1 1 auto;min-height:44px}
@@ -1814,6 +1817,9 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
     height:max(340px,calc(100vh - 150px));height:max(340px,calc(100dvh - 150px));
     min-height:300px;max-height:none;
   }
+
+  /* 糖果等主题的横线：从内容区起画，和文字行对齐 */
+  html:not(.is-glass) textarea.note-content{background-origin:content-box;background-attachment:local}
 
   /* 查找替换：输入框独占一行，按钮另起一行 */
   .fr-row{flex-wrap:wrap}
@@ -1853,6 +1859,13 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
   html body .toast{
     bottom:max(24px,calc(env(safe-area-inset-bottom) + 16px));
     width:max-content;max-width:calc(100vw - 32px);white-space:normal;text-align:center;line-height:1.5;
+  }
+}
+
+@supports (-webkit-touch-callout:none){
+  @media(max-width:800px){
+    body:not(.m-detail) .batch-bar.open{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 56px)}
+    html body .toast{bottom:calc(env(safe-area-inset-bottom) + 76px)}
   }
 }
 

@@ -1875,6 +1875,28 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
   html body .theme-tile:hover,html body .book-item:hover,html body .menu-item:hover{transform:none !important}
   html body .book-item:active{opacity:.78}
 }
+
+/* ====== 版本组：同一世界书的多个版本收在一起 ====== */
+.book-item-vers{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.bv{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;border:1px solid var(--border);font-size:10.5px;font-weight:600;color:var(--text2);cursor:pointer;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bv:hover{color:var(--text);border-color:var(--accent2)}
+.bv.on{color:var(--text);background:var(--accent-glow);border-color:var(--accent2)}
+.bv.more{border-style:dashed;cursor:default}
+.cnt-sub{opacity:.65;font-weight:400}
+.ver-bar{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 16px;padding:9px 12px;border:1px solid var(--border);border-radius:16px;background:var(--field-bg,var(--bg))}
+.ver-bar .vb-t{font-size:11.5px;color:var(--text2);white-space:nowrap}
+.ver-bar .vb-t b{color:var(--text);font-weight:600}
+.ver-bar .vb-chips{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
+.ver-bar .vb-acts{display:flex;gap:6px;flex-shrink:0}
+.vchip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text2);font:inherit;font-size:12px;font-weight:600;cursor:pointer;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color .2s,color .2s,border-color .2s}
+.vchip:hover{color:var(--text);border-color:var(--accent2)}
+.vchip.on{color:var(--text);background:var(--accent-glow);border-color:var(--accent2);box-shadow:inset 0 0 0 1px var(--accent2)}
+.vchip small{font-size:9.5px;font-weight:600;opacity:.75;padding:0 5px;border-radius:999px;border:1px solid currentColor}
+.fam-sug-row{display:flex;gap:10px;align-items:flex-start}
+.fam-sug-row input[type=checkbox]{width:auto;margin-top:6px;flex-shrink:0}
+.fam-sug-row .fs-b{flex:1;min-width:0}
+.fam-sug-row .fs-b input{margin-bottom:6px}
+@media (max-width:800px){.ver-bar .vb-acts{width:100%}}
 </style>
 </head>
 <body>
@@ -1929,6 +1951,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
       <button class="menu-item" onclick="openCombo(false)"><i class="emo">🧺</i><svg class="ico"><use href="#i-dup"/></svg>组合套装</button>
       <button class="menu-item" onclick="openCats()"><i class="emo">🗂️</i><svg class="ico"><use href="#i-folder"/></svg>分类管理</button>
       <button class="menu-item" onclick="openAuthors()"><i class="emo">✍️</i><svg class="ico"><use href="#i-edit"/></svg>作者管理</button>
+      <button class="menu-item" onclick="openFamSuggest()"><i class="emo">📚</i><svg class="ico"><use href="#i-folder"/></svg>整理版本</button>
       <button class="menu-item" onclick="openTrash()"><i class="emo">🗑️</i><svg class="ico"><use href="#i-trash"/></svg>回收站<span class="menu-badge" id="trashBadge"></span></button>
       <div class="menu-sep"></div>
       <div class="menu-hint">可以直接把 .json / .txt / .md / .docx / .doc 文件拖进页面导入；按 <b>/</b> 快速搜索。</div>
@@ -2002,6 +2025,10 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
     <div class="m-two">
       <div><label>版本 <span style="font-weight:400;color:var(--text2)">(可选)</span></label><input id="mVer" placeholder="例：v1.0" autocomplete="off"></div>
       <div><label>作品更新日期 <span style="font-weight:400;color:var(--text2)">(可选)</span></label><input id="mVerDate" type="date"></div>
+    </div>
+    <div id="mFamWrap" style="display:none">
+      <label>所属世界书（版本组标题） <span style="font-weight:400;color:var(--text2)">改了会同步给这一组的所有版本</span></label>
+      <input id="mFam" maxlength="80" autocomplete="off">
     </div>
     <label>作者备注 <span style="font-weight:400;color:var(--text2)">(可选)</span></label>
     <textarea id="mNote" placeholder="关于这本世界书的备注、使用说明、来源等..." style="min-height:70px"></textarea>
@@ -2102,7 +2129,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
     <h3>导入预览</h3>
     <p class="modal-sub" id="impSum"></p>
     <div class="imp-bulk" id="impBulk">重名的书统一：
-      <select onchange="impBulkSet(this.value);this.value=''"><option value="">选择…</option><option value="skip">全部跳过</option><option value="over">全部覆盖本地</option><option value="both">全部保留两份</option></select>
+      <select onchange="impBulkSet(this.value);this.value=''"><option value="">选择…</option><option value="skip">全部跳过</option><option value="ver">全部作为新版本</option><option value="over">全部覆盖本地</option><option value="both">全部保留两份</option></select>
       <span>（覆盖前会把本地内容存进历史版本）</span>
     </div>
     <div id="impList"></div>
@@ -2110,6 +2137,56 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
       <button class="btn btn-ghost" onclick="closeImport()">取消</button>
       <button class="btn btn-primary" onclick="applyImport()">确认导入</button>
     </div>
+  </div>
+</div>
+
+<!-- 归为同一本世界书 -->
+<div class="modal-bg" id="famBg" onclick="if(event.target===this)closeFam()">
+  <div class="modal" style="max-width:560px">
+    <h3>归为同一本世界书</h3>
+    <p class="modal-sub" id="famSub"></p>
+    <label>这本世界书叫什么</label>
+    <input id="famTitle" maxlength="80" autocomplete="off">
+    <label>各个版本（旧的在上，新的在下；可以改版本号）</label>
+    <div id="famRows"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeFam()">取消</button>
+      <button class="btn btn-primary" onclick="confirmFam()">归到一起</button>
+    </div>
+  </div>
+</div>
+
+<!-- 整理版本：自动发现可能是同一本的不同版本 -->
+<div class="modal-bg" id="famSugBg" onclick="if(event.target===this)closeFamSug()">
+  <div class="modal" style="max-width:620px">
+    <h3>整理版本</h3>
+    <p class="modal-sub" id="famSugSum"></p>
+    <div id="famSugList"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeFamSug()">关闭</button>
+      <button class="btn btn-primary" id="famSugApply" onclick="applyFamSuggest()">归到一起</button>
+    </div>
+  </div>
+</div>
+
+<!-- 归入其他世界书 -->
+<div class="modal-bg" id="famPickBg" onclick="if(event.target===this)closeFamPick()">
+  <div class="modal" style="max-width:520px">
+    <h3>归入其他世界书</h3>
+    <p class="modal-sub" id="fpSub"></p>
+    <input id="fpQ" placeholder="搜索名称 / 作者…" oninput="renderFamPick()" autocomplete="off" style="margin-bottom:10px">
+    <div id="fpList"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeFamPick()">取消</button></div>
+  </div>
+</div>
+
+<!-- 对比版本 -->
+<div class="modal-bg" id="vdBg" onclick="if(event.target===this)closeVerDiff()">
+  <div class="modal" style="max-width:680px">
+    <h3>对比版本</h3>
+    <div class="imp-bulk">旧 <select id="vdA" onchange="renderVerDiff()"></select> → 新 <select id="vdB" onchange="renderVerDiff()"></select></div>
+    <div id="vdOut"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeVerDiff()">关闭</button></div>
   </div>
 </div>
 
@@ -2529,14 +2606,292 @@ function normalizeBooks() {
     if (b.src == null) b.src = "";
     if (b.ver == null) b.ver = "";
     if (b.verDate == null) b.verDate = "";
+    b.fam = b.fam ? String(b.fam) : "";
+    b.famName = b.famName ? String(b.famName) : "";
+    if (!b.fam) b.famName = "";
     if (!b.cat) b.cat = firstCatId();
     b.pinned = !!b.pinned;
+  });
+  /* 版本组：收藏状态在组内保持一致；缺标题的补上 */
+  const fams = {};
+  books.forEach(b => { if (b.fam) (fams[b.fam] = fams[b.fam] || []).push(b); });
+  Object.keys(fams).forEach(k => {
+    const g = fams[k], pin = g.some(b => b.pinned);
+    const nm = (g.find(b => b.famName) || {}).famName || splitName(g[0].name).base || g[0].name;
+    g.forEach(b => { b.pinned = pin; if (!b.famName) b.famName = nm; });
   });
 }
 
 function save(quiet) {
   try { localStorage.setItem(BOOKS_KEY, JSON.stringify(books)); if (!quiet) markDirty(); return true; }
   catch (e) { showToast("⚠️ 浏览器存储空间不足，请先导出备份"); return false; }
+}
+
+/* =====================================================================
+   版本组：同一世界书的不同版本收在一起
+   每本书多两个字段：fam（组 id，空 = 单独一本）、famName（组标题，同组所有版本一致）
+   ===================================================================== */
+const VTOK = /^(?:v|ver\.?|version)?\s*\.?\s*\d+(?:[.\-_]\d+)*[a-z]?$|^第?[0-9一二三四五六七八九十]+版$|^(?:修订|修正|终|最终|最新|旧|新|完整|精简|增强|测试|正式|预览|重制|优化|升级|更新)版?$|^(?:beta|alpha|final|new|old|fixed|revised|copy|副本)$|^新导入\s*\d*$|^(?:20)?\d{2}[-./年]\d{1,2}(?:[-./月]\d{1,2}日?)?$/i;
+/* 把「林间旅店 v2.1（新导入）」拆成 {base:"林间旅店", tag:"v2.1 新导入"} */
+function splitName(name) {
+  let s = String(name || "").trim();
+  const tags = [];
+  for (let n = 0; n < 4; n++) {
+    let m = s.match(/^(.*?)[\s_\-—–·]*[（(【\[]\s*([^（()）【】\[\]]{1,24}?)\s*[）)】\]]$/);
+    if (m && m[1].trim() && VTOK.test(m[2])) { tags.unshift(m[2]); s = m[1].trim(); continue; }
+    m = s.match(/^(.*?)[\s_—–·]*[（(【\[]?\s*((?:20)?\d{2}[-./年]\d{1,2}(?:[-./月]\d{1,2}日?)?)\s*[）)】\]]?$/);
+    if (m && m[1].trim()) { tags.unshift(m[2]); s = m[1].trim(); continue; }
+    m = s.match(/^(.*?)[\s_\-—–·]+([^\s_\-—–·]{1,16})$/);
+    if (m && m[1].trim() && VTOK.test(m[2])) { tags.unshift(m[2]); s = m[1].trim(); continue; }
+    m = s.match(/^(.*[^A-Za-z])((?:v|ver\.?)\s*\d+(?:\.\d+)*[a-z]?)$/i);
+    if (m && m[1].trim()) { tags.unshift(m[2]); s = m[1].trim(); continue; }
+    m = s.match(/^(.+?)((?:第?[0-9一二三四五六七八九十]+|修订|修正|最终|最新|完整|精简|增强|正式|重制|优化|升级)版)$/);
+    if (m) { tags.unshift(m[2]); s = m[1].trim(); continue; }
+    break;
+  }
+  return {base: s || String(name || "").trim(), tag: tags.join(" ")};
+}
+function newFamId() { return "f" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function famOf(b) { return b.fam ? books.filter(x => x.fam === b.fam) : [b]; }
+function verKey(b) { const t = b.verDate ? Date.parse(b.verDate) : NaN; return isNaN(t) ? (b.createdAt || 0) : t; }
+function famSorted(arr) { return arr.slice().sort((a, b) => verKey(a) - verKey(b) || (a.createdAt || 0) - (b.createdAt || 0)); }
+function verLabel(b, sorted) {
+  if (b.ver) return b.ver;
+  const t = splitName(b.name).tag; if (t) return t;
+  if (b.famName && b.name !== b.famName && b.name.indexOf(b.famName) === 0) {
+    const r = b.name.slice(b.famName.length).replace(/^[\s_\-—–·（(【\[]+|[\s）)】\]]+$/g, "");
+    if (r) return r;
+  }
+  if (b.verDate) return b.verDate;
+  const arr = sorted || famSorted(famOf(b));
+  return "版本 " + (arr.indexOf(b) + 1);
+}
+function bestBase(arr) { return arr.map(b => splitName(b.name).base).sort((a, b) => a.length - b.length)[0] || ""; }
+function countGroups(arr) { const s = new Set(); arr.forEach(b => s.add(b.fam || b.id)); return s.size; }
+function findSibling(nm, author) {
+  const k = authorKey(splitName(nm).base), ak = authorKey(author || "未知");
+  if (!k || k.length < 2) return null;
+  return books.find(x => authorKey(splitName(x.name).base) === k && authorKey(x.author || "未知") === ak) || null;
+}
+/* 把若干本（及它们各自所在的整组）并成一组；返回按时间排好的成员 */
+function mergeFam(list, title) {
+  const set = new Set(list);
+  list.forEach(b => { if (b.fam) books.forEach(x => { if (x.fam === b.fam) set.add(x); }); });
+  const arr = famSorted([...set]);
+  const fam = (arr.find(b => b.fam) || {}).fam || newFamId();
+  const latest = arr[arr.length - 1], pin = arr.some(b => b.pinned);
+  arr.forEach(b => { b.fam = fam; b.famName = title; b.cat = latest.cat; b.pinned = pin; });
+  return arr;
+}
+/* 列表分组：同一组只出一张卡片，代表本 = 当前正在看的那个版本，否则是最新版本 */
+function groupList(list) {
+  const out = [], byFam = new Map(), cur = books[selectedIdx];
+  list.forEach(b => {
+    if (!b.fam) { out.push({rep: b, members: [b], all: 1}); return; }
+    let g = byFam.get(b.fam);
+    if (!g) { g = {rep: b, members: [], fam: b.fam, all: famOf(b).length}; byFam.set(b.fam, g); out.push(g); }
+    g.members.push(b);
+  });
+  out.forEach(g => {
+    if (!g.fam) return;
+    g.members = famSorted(g.members);
+    g.rep = (cur && g.members.includes(cur)) ? cur : g.members[g.members.length - 1];
+  });
+  return out;
+}
+function pickVer(id) { const i = books.findIndex(b => b.id === id); if (i >= 0) selectBook(i); }
+function pickVerEv(ev, id) { if (selectMode) return; ev.stopPropagation(); pickVer(id); }
+
+function verBarHtml(b, i) {
+  const mem = famSorted(famOf(b));
+  if (mem.length < 2) return "";
+  const latest = mem[mem.length - 1];
+  return `<div class="ver-bar"><div class="vb-t"><i class="emo">📚 </i>共 <b>${mem.length}</b> 个版本</div>
+    <div class="vb-chips">${mem.map(m => `<button class="vchip${m === b ? " on" : ""}" onclick="pickVer('${escAttr(m.id)}')" title="${escAttr(m.name)}">${esc(verLabel(m, mem))}${m === latest ? '<small title="按作品更新日期 / 收入时间判断">最新</small>' : ""}</button>`).join("")}</div>
+    <div class="vb-acts"><button class="btn btn-ghost btn-sm" onclick="newVersion(${i})">＋ 新版本</button><button class="btn btn-ghost btn-sm" onclick="openVerDiff(${i})">对比</button></div></div>`;
+}
+
+/* ---- 新建版本 / 移出 / 拆散 / 删除整组 ---- */
+function newVersion(idx) {
+  closeMenus();
+  const b = books[idx]; if (!b) return;
+  const now = Date.now();
+  if (!b.fam) { b.fam = newFamId(); b.famName = splitName(b.name).base || b.name; }
+  const copy = Object.assign({}, b, {id: uid(), name: splitName(b.name).tag ? b.famName : b.name, ver: "", verDate: "", uses: 0, lastUsed: 0, createdAt: now, updatedAt: now});
+  books.splice(idx + 1, 0, copy);
+  selectedIdx = idx + 1;
+  save(); renderAll();
+  editBook(idx + 1);
+  showToast("📚 已新建一个版本：填好版本号、粘贴新内容保存即可");
+  setTimeout(() => { const el = document.getElementById("mVer"); if (el) el.focus(); }, 80);
+}
+function leaveFam(idx) {
+  closeMenus();
+  const b = books[idx]; if (!b || !b.fam) return;
+  const rest = books.filter(x => x.fam === b.fam && x !== b);
+  b.fam = ""; b.famName = "";
+  if (rest.length === 1) { rest[0].fam = ""; rest[0].famName = ""; }
+  save(); renderAll();
+  showToast("已移出版本组，现在是单独一本");
+}
+function ungroupFam(idx) {
+  closeMenus();
+  const b = books[idx]; if (!b || !b.fam) return;
+  const mem = famOf(b);
+  askConfirm("拆散版本组", `「${b.famName || b.name}」的 ${mem.length} 个版本会各自变回独立的一本，内容不会变。`, "拆散", () => {
+    mem.forEach(x => { x.fam = ""; x.famName = ""; });
+    save(); renderAll(); showToast("已拆散，各个版本现在是独立的");
+  });
+}
+function deleteFam(idx) {
+  closeMenus();
+  const b = books[idx]; if (!b) return;
+  const mem = famOf(b);
+  askConfirm("删除整个版本组", `把「${b.famName || b.name}」的 ${mem.length} 个版本全部移到回收站吗？30 天内可以找回。`, "全部移到回收站", () => {
+    if (!moveToTrash(mem)) return;
+    renderAll(); showToast(`🗑️ 已把 ${mem.length} 个版本移到回收站`);
+  });
+}
+
+/* ---- 手动归到一起（批量选择 → 归为一本） ---- */
+let famDraft = null;
+function openFamMerge(list) {
+  const set = new Set(list);
+  list.forEach(b => { if (b.fam) books.forEach(x => { if (x.fam === b.fam) set.add(x); }); });
+  const arr = famSorted([...set]);
+  if (arr.length < 2) { showToast("⚠️ 至少要选两本"); return; }
+  famDraft = arr.map(b => b.id);
+  const known = arr.find(b => b.famName);
+  document.getElementById("famTitle").value = known ? known.famName : bestBase(arr);
+  document.getElementById("famSub").textContent = `共 ${arr.length} 个版本。归到一起后列表里只显示一张卡片，点进去可以在版本之间切换；分类会统一成最新版本的「${catOf(arr[arr.length - 1].cat).name}」。随时可以在「更多」菜单里拆开。`;
+  document.getElementById("famRows").innerHTML = arr.map(b => `<div class="list-row"><div class="lr-main"><div class="lr-t">${esc(b.name)}</div><div class="lr-m">${esc(b.author || "未知")} · ${fmt(b.content.length)} 字 · ${b.verDate ? "作品更新 " + esc(b.verDate) : fmtDate(b.createdAt) + " 收入"}</div></div><div class="lr-a"><input class="fam-ver" data-id="${escAttr(b.id)}" value="${escAttr(b.ver || splitName(b.name).tag || "")}" placeholder="版本号" maxlength="24" style="width:100px"></div></div>`).join("");
+  document.getElementById("famBg").classList.add("show");
+}
+function closeFam() { document.getElementById("famBg").classList.remove("show"); famDraft = null; }
+function confirmFam() {
+  const title = document.getElementById("famTitle").value.trim();
+  if (!title) { showToast("⚠️ 给这本世界书起个名字"); return; }
+  const list = (famDraft || []).map(id => books.find(b => b.id === id)).filter(Boolean);
+  document.querySelectorAll("#famRows .fam-ver").forEach(inp => { const b = books.find(x => x.id === inp.dataset.id); if (b) b.ver = inp.value.trim(); });
+  mergeFam(list, title);
+  selIds.clear();
+  save(); closeFam(); renderAll(); renderBatchBar();
+  showToast(`📚 已把 ${list.length} 个版本收在「${title}」里`);
+}
+function batchFam() { const sel = selBooks(); if (sel.length >= 2) openFamMerge(sel); }
+
+/* ---- 整理版本：自动找「名字只差版本后缀」的书 ---- */
+let famSug = [];
+function famSuggestions() {
+  const map = new Map();
+  books.forEach(b => {
+    const k = authorKey(splitName(b.name).base);
+    if (!k || k.length < 2) return;
+    const key = k + "\u0000" + authorKey(b.author || "未知");
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(b);
+  });
+  const out = [];
+  map.forEach(g => {
+    if (g.length < 2) return;
+    if (g[0].fam && g.every(b => b.fam === g[0].fam)) return;
+    out.push(famSorted(g));
+  });
+  return out;
+}
+function openFamSuggest() {
+  closeMenus();
+  famSug = famSuggestions();
+  document.getElementById("famSugSum").textContent = famSug.length
+    ? `找到 ${famSug.length} 组看起来是同一本世界书的不同版本（作者相同，名字去掉版本号 / 日期 / 「新导入」「副本」之类的后缀后一样）。勾上的会归到一起，拿不准的取消勾选；标题可以直接改。`
+    : "没有发现需要整理的：去掉版本后缀之后，没有两本是同名的。名字差得比较多的，可以在「选择」模式里勾选后点「归为一本」，或者在书页菜单里用「归入其他世界书」。";
+  document.getElementById("famSugList").innerHTML = famSug.map((g, i) => {
+    const t = (g.find(b => b.famName) || {}).famName || bestBase(g);
+    return `<div class="hist-item" style="padding:10px 12px"><div class="fam-sug-row"><input type="checkbox" id="fsC${i}" checked><div class="fs-b"><input id="fsT${i}" value="${escAttr(t)}" maxlength="80">${g.map(b => `<div class="lr-m">· ${esc(b.name)} <span style="opacity:.7">${fmt(b.content.length)} 字${b.fam ? " · 已在版本组里" : ""}</span></div>`).join("")}</div></div></div>`;
+  }).join("");
+  document.getElementById("famSugApply").style.display = famSug.length ? "" : "none";
+  document.getElementById("famSugBg").classList.add("show");
+}
+function closeFamSug() { document.getElementById("famSugBg").classList.remove("show"); }
+function applyFamSuggest() {
+  let n = 0, v = 0;
+  famSug.forEach((g, i) => {
+    const c = document.getElementById("fsC" + i); if (!c || !c.checked) return;
+    const t = document.getElementById("fsT" + i).value.trim(); if (!t) return;
+    g.forEach(b => { if (!b.ver) { const tag = splitName(b.name).tag; if (tag) b.ver = tag; } });
+    mergeFam(g, t); n++; v += g.length;
+  });
+  if (!n) { showToast("没有勾选任何一组"); return; }
+  save(); closeFamSug(); renderAll();
+  showToast(`📚 已把 ${v} 本整理成 ${n} 本世界书（含多个版本）`);
+}
+
+/* ---- 归入其他世界书 ---- */
+let pickFromId = "";
+function openFamPick(idx) {
+  closeMenus();
+  const b = books[idx]; if (!b) return;
+  pickFromId = b.id;
+  document.getElementById("fpSub").textContent = `把「${b.name}」收进另一本世界书，作为它的一个版本。`;
+  document.getElementById("fpQ").value = "";
+  renderFamPick();
+  document.getElementById("famPickBg").classList.add("show");
+  setTimeout(() => document.getElementById("fpQ").focus(), 60);
+}
+function closeFamPick() { document.getElementById("famPickBg").classList.remove("show"); pickFromId = ""; }
+function renderFamPick() {
+  const cur = books.find(b => b.id === pickFromId); if (!cur) return;
+  const q = document.getElementById("fpQ").value.trim().toLowerCase();
+  const ck = authorKey(splitName(cur.name).base);
+  const seen = new Set(), rows = [];
+  books.forEach(b => {
+    if (b === cur || (cur.fam && b.fam === cur.fam)) return;
+    const key = b.fam || b.id; if (seen.has(key)) return;
+    const mem = famSorted(famOf(b));
+    const hay = (mem.map(x => x.name + " " + x.author).join(" ") + " " + (b.famName || "")).toLowerCase();
+    if (q && !hay.includes(q)) return;
+    seen.add(key);
+    rows.push({b: mem[mem.length - 1], n: mem.length, title: mem.length > 1 && b.famName ? b.famName : b.name, near: authorKey(splitName(b.name).base) === ck});
+  });
+  rows.sort((x, y) => (y.near - x.near) || x.title.localeCompare(y.title, "zh"));
+  const box = document.getElementById("fpList");
+  box.innerHTML = rows.slice(0, 60).map(r => `<div class="list-row"><div class="lr-main"><div class="lr-t">${r.near ? '<span class="tag-s">名字相近</span>' : ""}${esc(r.title)}</div><div class="lr-m">${esc(r.b.author || "未知")} · ${r.n > 1 ? r.n + " 个版本" : fmt(r.b.content.length) + " 字"}</div></div><div class="lr-a"><button class="btn btn-ghost btn-sm" onclick="attachTo('${escAttr(r.b.id)}')">收进去</button></div></div>`).join("")
+    + (rows.length > 60 ? `<div class="hist-empty">只显示前 60 个，请继续输入关键词缩小范围</div>` : "")
+    || `<div class="hist-empty">没有匹配的世界书</div>`;
+}
+function attachTo(targetId) {
+  const cur = books.find(b => b.id === pickFromId), tgt = books.find(b => b.id === targetId);
+  if (!cur || !tgt) return;
+  const old = cur.fam ? books.filter(x => x.fam === cur.fam && x !== cur) : [];
+  cur.fam = ""; cur.famName = "";
+  if (old.length === 1) { old[0].fam = ""; old[0].famName = ""; }
+  const title = (tgt.fam && tgt.famName) || splitName(tgt.name).base || tgt.name;
+  if (!cur.ver) { const t = splitName(cur.name).tag; if (t) cur.ver = t; }
+  if (!tgt.ver && !tgt.fam) { const t0 = splitName(tgt.name).tag; if (t0) tgt.ver = t0; }
+  mergeFam([tgt, cur], title);
+  save(); closeFamPick(); renderAll();
+  showToast(`📚 已收进「${title}」`);
+}
+
+/* ---- 对比两个版本 ---- */
+function openVerDiff(idx) {
+  const b = books[idx]; if (!b) return;
+  const mem = famSorted(famOf(b));
+  if (mem.length < 2) return;
+  const opts = sel => mem.map(m => `<option value="${escAttr(m.id)}"${m.id === sel ? " selected" : ""}>${esc(verLabel(m, mem))}</option>`).join("");
+  const k = mem.indexOf(b), prev = k > 0 ? mem[k - 1] : mem[1];
+  const a = k > 0 ? prev : b, z = k > 0 ? b : prev;
+  document.getElementById("vdA").innerHTML = opts(a.id);
+  document.getElementById("vdB").innerHTML = opts(z.id);
+  renderVerDiff();
+  document.getElementById("vdBg").classList.add("show");
+}
+function closeVerDiff() { document.getElementById("vdBg").classList.remove("show"); }
+function renderVerDiff() {
+  const a = books.find(b => b.id === document.getElementById("vdA").value), z = books.find(b => b.id === document.getElementById("vdB").value);
+  const out = document.getElementById("vdOut");
+  if (!a || !z) { out.innerHTML = ""; return; }
+  out.innerHTML = a === z ? `<div class="hist-empty">选了同一个版本</div>` : diffHtml(a.content, z.content, "从旧到新：");
 }
 
 function renderAll() {
@@ -2677,7 +3032,7 @@ function renderFilterOptions() {
   const container = document.getElementById("filterContent");
   if (activeFilterTab === "cat") {
     container.innerHTML = `<div class="fchips">` + CATS.map(c => {
-      const count = c.id === "all" ? books.length : books.filter(b => b.cat === c.id).length;
+      const count = c.id === "all" ? countGroups(books) : countGroups(books.filter(b => b.cat === c.id));
       return `<button class="fchip${activeCat === c.id ? " active" : ""}" onclick="setCat('${c.id}')"><i class="emo">${esc(c.icon || "")} </i><span class="fc-n">${esc(c.id === "all" ? "全部" : c.name)}</span><span class="fc-c">${count}</span></button>`;
     }).join("") + `<button class="fchip more" onclick="openCats()">＋ 新建 / 管理</button></div>`;
   } else if (activeFilterTab === "author") {
@@ -2691,8 +3046,9 @@ function renderFilterOptions() {
 function renderAuthorChips() {
   const box = document.getElementById("fchipsBox");
   if (!box) return;
-  const cnt = {};
-  books.forEach(b => { const a = b.author || "未知"; cnt[a] = (cnt[a] || 0) + 1; });
+  const cnt = {}, seenA = {};
+  books.forEach(b => { const a = b.author || "未知"; (seenA[a] = seenA[a] || new Set()).add(b.fam || b.id); });
+  Object.keys(seenA).forEach(a => { cnt[a] = seenA[a].size; });
   let list = Object.keys(cnt).sort((x, y) => cnt[y] - cnt[x] || x.localeCompare(y, "zh"));
   const total = list.length;
   const q = authorQuery.trim().toLowerCase();
@@ -2704,7 +3060,7 @@ function renderAuthorChips() {
     if (activeAuthor !== "all" && list.indexOf(activeAuthor) >= 0 && shown.indexOf(activeAuthor) < 0) shown = [activeAuthor].concat(shown.slice(0, AUTHOR_LIMIT - 1));
   }
   const chip = (label, count, active, onclick) => `<button class="fchip${active ? " active" : ""}" onclick="${onclick}"><span class="fc-n">${esc(label)}</span><span class="fc-c">${count}</span></button>`;
-  let html = q ? "" : chip("全部作者", books.length, activeAuthor === "all", "setAuthor('all')");
+  let html = q ? "" : chip("全部作者", countGroups(books), activeAuthor === "all", "setAuthor('all')");
   html += shown.map(a => chip(a, cnt[a], activeAuthor === a, `setAuthor(decodeURIComponent('${encodeURIComponent(a)}'))`)).join("");
   if (collapsed) html += `<button class="fchip more" onclick="toggleAuthorMore()">+${list.length - shown.length} 更多</button>`;
   else if (!q && authorExpanded && total > AUTHOR_LIMIT) html += `<button class="fchip more" onclick="toggleAuthorMore()">收起</button>`;
@@ -2755,7 +3111,7 @@ function getFiltered() {
     if (activeAuthor !== "all" && (b.author || "未知") !== activeAuthor) return false;
     if (favOnly && !b.pinned) return false;
     if (terms.length) {
-      const hay = (b.name + "\n" + (b.author || "") + "\n" + (b.keywords || "") + "\n" + (b.note || "") + "\n" + (b.ver || "") + "\n" + (b.src || "") + "\n" + b.content).toLowerCase();
+      const hay = (b.name + "\n" + (b.author || "") + "\n" + (b.keywords || "") + "\n" + (b.note || "") + "\n" + (b.ver || "") + "\n" + (b.famName || "") + "\n" + (b.src || "") + "\n" + b.content).toLowerCase();
       if (!terms.every(t => hay.includes(t))) return false;
     }
     return true;
@@ -2782,32 +3138,43 @@ function getFiltered() {
 function renderBookList() {
   renderActiveFilters();
   const list = getFiltered();
-  document.getElementById("countBar").innerHTML = `<i class="emo">✨ </i>共 <b>${list.length}</b> 本`;
+  const groups = groupList(list);
+  const extra = list.length - groups.length;
+  document.getElementById("countBar").innerHTML = `<i class="emo">✨ </i>共 <b>${groups.length}</b> 本${extra > 0 ? `<span class="cnt-sub">（含 ${list.length} 个版本）</span>` : ""}`;
   document.getElementById("selChip").classList.toggle("on", selectMode);
   document.getElementById("denChip").classList.toggle("on", document.body.classList.contains("compact"));
   document.getElementById("favChip").classList.toggle("on", favOnly);
   const container = document.getElementById("bookList");
-  if (!list.length) {
+  if (!groups.length) {
     container.innerHTML = `<div class="book-list-empty"><div class="empty-icon">📚</div><div>${books.length ? "没有找到匹配的世界书" : "还没有世界书"}</div></div>`;
     return;
   }
   const rx = searchRx();
-  container.innerHTML = list.map((b, i) => {
+  container.innerHTML = groups.map((g, i) => {
+    const b = g.rep;
     const idx = books.indexOf(b);
     const cat = catOf(b.cat);
     const sel = idx === selectedIdx ? " selected" : "";
+    const multi = g.all > 1;
+    const title = multi && b.famName ? b.famName : b.name;
+    const checked = g.members.some(m => selIds.has(m.id));
     const kwArr = (b.keywords || "").split(/[,，]/).map(s => s.trim()).filter(Boolean);
     const kwMax = 4;
     const kwShow = kwArr.slice(0, kwMax);
     const kwRest = kwArr.length - kwMax;
     const snip = rx ? searchSnippet(b, rx) : "";
+    let vers = "";
+    if (multi) {
+      const all = famSorted(famOf(b)), shown = all.slice(-4), hidden = all.length - shown.length;
+      vers = `<div class="book-item-vers">${hidden > 0 ? `<span class="bv more">+${hidden}</span>` : ""}${shown.map(m => `<span class="bv${m === b ? " on" : ""}" onclick="pickVerEv(event,'${escAttr(m.id)}')" title="${escAttr(m.name)}">${esc(verLabel(m, all))}</span>`).join("")}</div>`;
+    }
     return `<div class="book-item${sel}" style="--n:${i}" onclick="itemClick(${idx})">
-      <span class="sel-box${selIds.has(b.id) ? " on" : ""}"></span>
+      <span class="sel-box${checked ? " on" : ""}"></span>
       ${b.pinned ? '<span class="book-pin" title="已收藏"></span>' : ""}
       <div class="book-item-top">
         <div class="book-item-icon"><span>${cat.icon || "📖"}</span></div>
         <div class="book-item-info">
-          <div class="book-item-name">${hl(b.name, rx)}</div>
+          <div class="book-item-name">${hl(title, rx)}</div>
           <div class="book-item-meta">
             <span><i class="emo">✍️ </i>${hl(b.author, rx)}</span>
             <span class="book-item-tag">${esc(cat.name)}</span>
@@ -2815,6 +3182,7 @@ function renderBookList() {
           </div>
         </div>
       </div>
+      ${vers}
       ${kwShow.length ? `<div class="book-item-kw">${kwShow.map(k => `<span class="book-item-kw-pill">${hl(k, rx)}</span>`).join("")}${kwRest > 0 ? `<span class="book-item-kw-pill">+${kwRest}</span>` : ""}</div>` : ""}
       ${snip ? `<div class="book-item-snip">${snip}</div>` : ""}
     </div>`;
@@ -2847,6 +3215,7 @@ function renderEditor(keepStill) {
   }
   const i = selectedIdx;
   const b = books[i];
+  const isFam = famOf(b).length > 1;
   const cat = catOf(b.cat);
   const kwArr = (b.keywords || "").split(/[,，]/).map(s => s.trim()).filter(Boolean);
   const focusOn = document.body.classList.contains("focus-mode") ? " on" : "";
@@ -2855,6 +3224,7 @@ function renderEditor(keepStill) {
     <div class="tape-left"></div>
     <div class="tape-right"></div>
     <div class="note-header">
+      ${verBarHtml(b, i)}
       <div class="note-title-row">
         <div class="note-icon"><i class="emo">${cat.icon || "📖"}</i></div>
         <div class="note-title-info">
@@ -2875,11 +3245,16 @@ function renderEditor(keepStill) {
           <div class="menu-wrap" id="noteMenu">
             <button class="btn btn-ghost btn-icon" onclick="toggleMenu('noteMenu',event)" title="更多操作"><i class="emo">⋯</i><svg class="ico"><use href="#i-more"/></svg></button>
             <div class="menu-panel">
-              <button class="menu-item" onclick="openHistory(${i})"><i class="emo">🕘</i><svg class="ico"><use href="#i-clock"/></svg>历史版本</button>
-              <button class="menu-item" onclick="duplicateBook(${i})"><i class="emo">📑</i><svg class="ico"><use href="#i-dup"/></svg>创建副本</button>
+              <button class="menu-item" onclick="openHistory(${i})"><i class="emo">🕘</i><svg class="ico"><use href="#i-clock"/></svg>历史版本（编辑记录）</button>
+              <button class="menu-item" onclick="newVersion(${i})"><i class="emo">📚</i><svg class="ico"><use href="#i-folder"/></svg>新建版本（收在同一本里）</button>
+              <button class="menu-item" onclick="openFamPick(${i})"><i class="emo">🔗</i><svg class="ico"><use href="#i-dup"/></svg>归入其他世界书…</button>
+              ${isFam ? `<button class="menu-item" onclick="leaveFam(${i})"><i class="emo">↗️</i><svg class="ico"><use href="#i-upload"/></svg>移出版本组</button>
+              <button class="menu-item" onclick="ungroupFam(${i})"><i class="emo">🧩</i><svg class="ico"><use href="#i-list"/></svg>拆散整个版本组</button>` : ""}
+              <button class="menu-item" onclick="duplicateBook(${i})"><i class="emo">📑</i><svg class="ico"><use href="#i-dup"/></svg>创建独立副本</button>
               <button class="menu-item" onclick="downloadBook(${i})"><i class="emo">⬇️</i><svg class="ico"><use href="#i-download"/></svg>下载为 .txt</button>
               <div class="menu-sep"></div>
-              <button class="menu-item danger" onclick="deleteBook(${i})"><i class="emo">🗑️</i><svg class="ico"><use href="#i-trash"/></svg>删除</button>
+              <button class="menu-item danger" onclick="deleteBook(${i})"><i class="emo">🗑️</i><svg class="ico"><use href="#i-trash"/></svg>${isFam ? "删除此版本" : "删除"}</button>
+              ${isFam ? `<button class="menu-item danger" onclick="deleteFam(${i})"><i class="emo">🗑️</i><svg class="ico"><use href="#i-trash"/></svg>删除整个版本组</button>` : ""}
             </div>
           </div>
         </div>
@@ -2980,7 +3355,8 @@ function onEdit(idx) {
 
 function togglePin(idx) {
   const b = books[idx];
-  b.pinned = !b.pinned;
+  const on = !b.pinned;
+  famOf(b).forEach(x => { x.pinned = on; });
   b.updatedAt = b.updatedAt || Date.now();
   save();
   renderBookList();
@@ -3031,7 +3407,7 @@ function toggleFocus() {
 function duplicateBook(idx) {
   const b = books[idx];
   const now = Date.now();
-  const copy = Object.assign({}, b, {id: uid(), name: b.name + " 副本", pinned: false, uses: 0, lastUsed: 0, createdAt: now, updatedAt: now});
+  const copy = Object.assign({}, b, {id: uid(), name: b.name + " 副本", fam: "", famName: "", pinned: false, uses: 0, lastUsed: 0, createdAt: now, updatedAt: now});
   books.splice(idx + 1, 0, copy);
   selectedIdx = idx + 1;
   save();
@@ -3064,6 +3440,8 @@ function editBook(idx) {
   document.getElementById("mSrc").value = books[idx].src || "";
   document.getElementById("mVer").value = books[idx].ver || "";
   document.getElementById("mVerDate").value = books[idx].verDate || "";
+  document.getElementById("mFamWrap").style.display = books[idx].fam ? "" : "none";
+  document.getElementById("mFam").value = books[idx].famName || "";
   document.getElementById("mContent").value = books[idx].content;
   document.getElementById("modalBg").classList.add("show");
 }
@@ -3071,7 +3449,13 @@ function editBook(idx) {
 function deleteBook(idx) {
   const b = books[idx];
   if (!b) return;
-  if (moveToTrash([b])) { renderAll(); showToast(`🗑️ 已移到回收站，30 天内可以在「更多 → 回收站」找回`); }
+  const sibs = b.fam ? famSorted(famOf(b).filter(x => x !== b)) : [];
+  const next = sibs.length ? sibs[sibs.length - 1] : null;
+  if (moveToTrash([b])) {
+    if (next) selectedIdx = books.indexOf(next);
+    renderAll();
+    showToast(sibs.length ? `🗑️ 已把这个版本移到回收站，这本还剩 ${sibs.length} 个版本` : `🗑️ 已移到回收站，30 天内可以在「更多 → 回收站」找回`);
+  }
 }
 
 function openAddModal() {
@@ -3085,6 +3469,7 @@ function openAddModal() {
   document.getElementById("mSrc").value = "";
   document.getElementById("mVer").value = "";
   document.getElementById("mVerDate").value = "";
+  document.getElementById("mFamWrap").style.display = "none";
   document.getElementById("mContent").value = "";
   document.getElementById("modalBg").classList.add("show");
 }
@@ -3159,6 +3544,10 @@ function saveModal() {
     const old = books[editIdx];
     if (old.content !== content) snapshot(old, old.content, true);
     Object.assign(old, {name, author: author || "未知", cat, keywords, note, src, ver, verDate, content, updatedAt: now});
+    if (old.fam) {
+      const ft = document.getElementById("mFam").value.trim();
+      famOf(old).forEach(x => { if (ft) x.famName = ft; x.cat = cat; });
+    }
     showToast("✅ 已更新");
   } else {
     books.push({id: uid(), name, author: author || "未知", cat, keywords, note, src, ver, verDate, content, pinned: false, uses: 0, lastUsed: 0, createdAt: now, updatedAt: now});
@@ -3185,7 +3574,7 @@ function showToast(msg) {
    分类管理
    ===================================================================== */
 function catRowHtml(c) {
-  const n = c.id ? books.filter(b => b.cat === c.id).length : 0;
+  const n = c.id ? countGroups(books.filter(b => b.cat === c.id)) : 0;
   return `<div class="cat-row" data-id="${escAttr(c.id || "")}" data-old="${escAttr(c.name || "")}">
     <input class="cat-icon" maxlength="4" value="${escAttr(c.icon || "📖")}" title="图标（糖果主题显示）">
     <input class="cat-name" maxlength="20" placeholder="分类名称" value="${escAttr(c.name || "")}">
@@ -3271,6 +3660,7 @@ function makeBook(b) {
     cat: CATS.some(c => c.id !== "all" && c.id === b.cat) ? b.cat : firstCatId(),
     keywords: b.keywords || "", note: b.note || "", content: b.content,
     src: b.src || "", ver: b.ver || "", verDate: b.verDate || "",
+    fam: b.fam ? String(b.fam) : "", famName: b.famName ? String(b.famName) : "",
     pinned: !!b.pinned, uses: b.uses || 0, lastUsed: b.lastUsed || 0,
     createdAt: b.createdAt || now, updatedAt: b.updatedAt || now
   };
@@ -3324,15 +3714,19 @@ async function importFiles(fileList) {
         const sig = b.name + "\u0000" + author + "\u0000" + b.content;
         if (seen.has(sig)) return;
         seen.add(sig);
-        const ex = books.find(x => x.name === String(b.name).trim() && x.author === author);
-        const it = {b, file: f.name, warn: b._warn || "", ex: ex ? ex.id : ""};
+        const nm = String(b.name).trim();
+        const cands = books.filter(x => x.name === nm && x.author === author);
+        const ex = cands.find(x => x.content === b.content) || cands[0];
+        const it = {b, file: f.name, warn: b._warn || "", ex: ex ? ex.id : "", sib: ""};
         it.kind = !ex ? "new" : (ex.content === b.content ? "same" : "conflict");
-        it.act = it.kind === "new" ? "add" : "skip";
+        /* 名字只差版本后缀 → 很可能是已有世界书的另一个版本（备份里自带版本组、且本地已有该组的除外） */
+        if (it.kind === "new" && !(b.fam && books.some(x => x.fam === b.fam))) { const sb = findSibling(nm, author); if (sb) it.sib = sb.id; }
+        it.act = it.kind === "conflict" ? "ver" : (it.kind === "new" ? (it.sib ? "ver" : "add") : "skip");
         impItems.push(it);
       });
     } catch (e) { impFails.push({file: f.name, msg: e && e.message || "无法识别"}); }
   }
-  const needAsk = impFails.length || impItems.some(it => it.kind !== "new" || it.warn);
+  const needAsk = impFails.length || impItems.some(it => it.kind !== "new" || it.warn || it.sib);
   if (!needAsk) { applyImport(); return; }
   renderImport();
   document.getElementById("importBg").classList.add("show");
@@ -3354,15 +3748,20 @@ function renderImport() {
   const rows = impItems.map((it, i) => {
     const b = it.b, ex = it.ex ? books.find(x => x.id === it.ex) : null;
     let tag = `<span class="tag-s">新的</span>`, meta = `${esc(b.author || "未知")} · ${fmt(b.content.length)} 字 · 来自 ${esc(it.file)}`, sel;
-    if (it.kind === "new") sel = opt("add", "导入", it.act) + opt("skip", "不导入", it.act);
+    const sibBk = it.sib ? books.find(x => x.id === it.sib) : null;
+    if (it.kind === "new" && sibBk) {
+      tag = `<span class="tag-s">像新版本</span>`;
+      meta = `像是「${esc(sibBk.name)}」的另一个版本 · ${meta}`;
+      sel = opt("ver", "收进同一本（新版本）", it.act) + opt("add", "单独导入", it.act) + opt("skip", "不导入", it.act);
+    } else if (it.kind === "new") sel = opt("add", "导入", it.act) + opt("skip", "不导入", it.act);
     else {
       tag = it.kind === "same" ? `<span class="tag-s">完全一样</span>` : `<span class="tag-s warn">重名</span>`;
       const v = (ex && (ex.ver || b.ver)) ? ` · 版本 ${esc(ex.ver || "—")} → ${esc(b.ver || "—")}` : "";
       meta = `本地 ${fmt(ex ? ex.content.length : 0)} 字 → 导入 ${fmt(b.content.length)} 字${v} · 来自 ${esc(it.file)}`;
-      sel = opt("skip", "跳过", it.act) + opt("over", "覆盖本地", it.act) + opt("both", "保留两份", it.act);
+      sel = opt("skip", "跳过", it.act) + opt("over", "覆盖本地", it.act) + opt("ver", "作为新版本收进去", it.act) + opt("both", "保留两份（各自独立）", it.act);
     }
     const warn = it.warn ? `<div class="lr-m" style="color:var(--danger)">${esc(it.warn)}</div>` : "";
-    const peek = it.kind === "conflict" ? "对比" : "预览";
+    const peek = (it.kind === "conflict" || it.sib) ? "对比" : "预览";
     return `<div class="hist-item" style="padding:10px 12px">
       <div class="hist-row"><div style="flex:1;min-width:0"><div class="lr-t">${tag}${esc(b.name)}</div><div class="lr-m">${meta}</div>${warn}</div>
       <div class="hist-actions"><button class="btn btn-ghost btn-sm" onclick="impPeek(${i})">${peek}</button><select onchange="impItems[${i}].act=this.value" style="width:auto;padding:5px 8px;font-size:12px">${sel}</select></div></div>
@@ -3380,8 +3779,8 @@ function impPeek(i) {
   const box = document.getElementById("ipd" + i), it = impItems[i];
   if (!box || !it) return;
   if (box.classList.contains("open")) { box.classList.remove("open"); return; }
-  const ex = it.ex ? books.find(x => x.id === it.ex) : null;
-  if (it.kind === "conflict" && ex) box.innerHTML = diffHtml(ex.content, it.b.content, "导入后：");
+  const ex = (it.ex || it.sib) ? books.find(x => x.id === (it.ex || it.sib)) : null;
+  if ((it.kind === "conflict" || it.sib) && ex) box.innerHTML = diffHtml(ex.content, it.b.content, "导入后：");
   else {
     const c = it.b.content;
     box.innerHTML = `<div class="hist-pre" style="border:none;max-height:260px">${esc(c.length > 1500 ? c.slice(0, 1500) + "\n…（仅预览前 1500 字）" : c)}</div>`;
@@ -3406,7 +3805,7 @@ function diffHtml(oldText, newText, label) {
 }
 function applyImport() {
   if (impCats.length) mergeCats(impCats);
-  let added = 0, over = 0, both = 0, skipped = 0;
+  let added = 0, over = 0, both = 0, skipped = 0, joined = 0;
   impItems.forEach(it => {
     const b = it.b;
     if (it.act === "add") { books.push(makeBook(b)); added++; }
@@ -3419,9 +3818,19 @@ function applyImport() {
       if (b.cat && CATS.some(c => c.id !== "all" && c.id === b.cat)) old.cat = b.cat;
       old.updatedAt = Date.now();
       over++;
+    } else if (it.act === "ver") {
+      const tgt = books.find(x => x.id === (it.ex || it.sib));
+      const nb = makeBook(b); nb.id = uid();
+      if (tgt) {
+        if (!tgt.fam) { tgt.fam = newFamId(); tgt.famName = splitName(tgt.name).base || tgt.name; if (!tgt.ver) { const t0 = splitName(tgt.name).tag; if (t0) tgt.ver = t0; } }
+        nb.fam = tgt.fam; nb.famName = tgt.famName; nb.cat = tgt.cat; nb.pinned = tgt.pinned;
+        if (!nb.ver) { const t = splitName(nb.name).tag; if (t) nb.ver = t; }
+        joined++;
+      } else { nb.fam = ""; nb.famName = ""; }
+      books.push(nb); added++;
     } else if (it.act === "both") {
       const nb = makeBook(b);
-      nb.id = uid();
+      nb.id = uid(); nb.fam = ""; nb.famName = "";
       nb.name = uniqueName(nb.name, nb.author);
       books.push(nb); both++;
     } else skipped++;
@@ -3430,6 +3839,7 @@ function applyImport() {
   if (changed) { normalizeBooks(); save(); renderAll(); }
   document.getElementById("importBg").classList.remove("show");
   const p = [`新增 ${added + both} 本`];
+  if (joined) p.push(`其中 ${joined} 个收进了已有的世界书`);
   if (over) p.push(`覆盖 ${over} 本`);
   if (skipped) p.push(`跳过 ${skipped} 本`);
   if (impFails.length) p.push(`${impFails.length} 个文件读不出来`);
@@ -4266,16 +4676,20 @@ function itemClick(idx) {
   if (selectMode) toggleSel(b.id); else selectBook(idx);
 }
 function toggleSel(id) {
-  if (selIds.has(id)) selIds.delete(id); else selIds.add(id);
+  const bk = books.find(x => x.id === id);
+  const mem = bk && bk.fam ? famOf(bk) : (bk ? [bk] : []);
+  if (mem.some(m => selIds.has(m.id))) mem.forEach(m => selIds.delete(m.id)); else selIds.add(id);
   renderBookList(); renderBatchBar();
 }
 function selectAllVisible() {
-  const list = getFiltered();
-  const all = list.length && list.every(b => selIds.has(b.id));
-  list.forEach(b => { if (all) selIds.delete(b.id); else selIds.add(b.id); });
+  const gs = groupList(getFiltered());
+  const all = gs.length && gs.every(g => g.members.some(m => selIds.has(m.id)));
+  gs.forEach(g => { if (all) g.members.forEach(m => selIds.delete(m.id)); else if (!g.members.some(m => selIds.has(m.id))) selIds.add(g.rep.id); });
   renderBookList(); renderBatchBar();
 }
 function selBooks() { return books.filter(b => selIds.has(b.id)); }
+/* 批量收藏 / 移分类 / 导出 / 删除：选中的是哪个版本，就带上它所在版本组的全部版本 */
+function selBooksFam() { const set = new Set(); selBooks().forEach(b => famOf(b).forEach(x => set.add(x))); return [...set]; }
 function renderBatchBar() {
   const el = document.getElementById("batchBar");
   el.classList.toggle("open", selectMode);
@@ -4286,6 +4700,7 @@ function renderBatchBar() {
   el.innerHTML = `<div class="bb-info"><b>${sel.length}</b> 本已选 · 约 ${fmt(tk)} tokens<button class="bb-link" onclick="selectAllVisible()">全选 / 取消</button></div>
     <div class="bb-acts">
       <button class="btn btn-ghost btn-sm"${dis} onclick="openCombo(true)">合并复制</button>
+      <button class="btn btn-ghost btn-sm"${sel.length >= 2 ? "" : " disabled"} onclick="batchFam()" title="把选中的几本收成同一本世界书的不同版本">归为一本</button>
       <button class="btn btn-ghost btn-sm"${dis} onclick="batchPin()">收藏</button>
       <select class="sort-select"${dis} onchange="batchMove(this.value);this.value=''"><option value="">移到分类…</option>${realCats().map(c => `<option value="${escAttr(c.id)}">${esc(c.name)}</option>`).join("")}<option value="__new__">＋ 新建分类…</option></select>
       <button class="btn btn-ghost btn-sm"${dis} onclick="batchExport()">导出</button>
@@ -4293,7 +4708,7 @@ function renderBatchBar() {
     </div>`;
 }
 function batchPin() {
-  const sel = selBooks();
+  const sel = selBooksFam();
   const any = sel.some(b => !b.pinned);
   sel.forEach(b => { b.pinned = any; });
   save(); renderAll(); renderBatchBar();
@@ -4302,13 +4717,13 @@ function batchPin() {
 function batchMove(catId) {
   if (!catId) return;
   if (catId === "__new__") { askNewCat(id => batchMove(id)); return; }
-  const sel = selBooks();
+  const sel = selBooksFam();
   sel.forEach(b => { b.cat = catId; });
   save(); renderAll(); renderBatchBar();
   showToast(`✅ 已把 ${sel.length} 本移到「${catOf(catId).name}」`);
 }
 function batchExport() {
-  const sel = selBooks();
+  const sel = selBooksFam();
   const data = JSON.stringify({app: "worldbook-gallery", version: 2, exportedAt: new Date().toISOString(), cats: realCats(), books: sel}, null, 2);
   const url = URL.createObjectURL(new Blob([data], {type: "application/json"}));
   const a = document.createElement("a");
@@ -4318,9 +4733,9 @@ function batchExport() {
   showToast(`💾 已导出所选 ${sel.length} 本`);
 }
 function batchDelete() {
-  const sel = selBooks();
+  const sel = selBooksFam();
   if (!sel.length) return;
-  askConfirm("批量删除", `把选中的 ${sel.length} 本移到回收站吗？30 天内可以找回。`, "移到回收站", () => {
+  askConfirm("批量删除", `把选中的 ${sel.length} 本${sel.length > selBooks().length ? "（含它们所在版本组的全部版本）" : ""}移到回收站吗？30 天内可以找回。`, "移到回收站", () => {
     if (!moveToTrash(sel)) return;
     selIds.clear();
     renderAll(); renderBatchBar();
@@ -4879,7 +5294,7 @@ function planPull(data) {
   data.books.forEach(rb => {
     if (!rb || !rb.id || typeof rb.content !== "string") return;
     const lb = books.find(b => b.id === rb.id);
-    if (lb) { if (["name", "author", "cat", "keywords", "note", "src", "ver", "verDate", "content"].some(k => (lb[k] || "") !== (rb[k] || ""))) upd++; }
+    if (lb) { if (["name", "author", "cat", "keywords", "note", "src", "ver", "verDate", "fam", "famName", "content"].some(k => (lb[k] || "") !== (rb[k] || ""))) upd++; }
     else if (!(trashedAt.has(rb.id) && (rb.updatedAt || 0) <= trashedAt.get(rb.id))) add++;
   });
   return {toTrash, keep, add, upd, trashedAt};

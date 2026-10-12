@@ -1842,6 +1842,13 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
   html body .g-body{padding-bottom:calc(30px + env(safe-area-inset-bottom))}
   html body .modal-actions .btn{flex:1}
 
+  /* ---- 主题面板：以整个顶栏为基准铺满屏幕宽度，不再超出右侧 ---- */
+  #themeWrap{position:static}
+  #themeWrap .theme-panel{
+    left:12px;right:12px;width:auto;max-width:none;top:calc(100% + 6px);transform-origin:top center;
+    max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);
+  }
+
   /* ---- Toast 避开底部安全区，长文字自动换行 ---- */
   html body .toast{
     bottom:max(24px,calc(env(safe-area-inset-bottom) + 16px));

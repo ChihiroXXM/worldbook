@@ -12,11 +12,11 @@
 (function(){
   var r = document.documentElement;
   try {
-    var ok = {'glass-night':1,'glass-day':1,'glass-auto':1,strawberry:1,mint:1,lavender:1,peach:1,sky:1};
+    var ok = {'glass-night':1,'glass-day':1,'glass-auto':1};
     var t = localStorage.getItem('wb_theme') || 'glass-auto';
     if (!ok[t]) t = 'glass-auto';
     if (t === 'glass-auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'glass-day' : 'glass-night';
-    if (t !== 'strawberry') r.setAttribute('data-theme', t);
+    r.setAttribute('data-theme', t);
     if (t.indexOf('glass') === 0) r.classList.add('is-glass');
   } catch (e) { r.setAttribute('data-theme', 'glass-night'); r.classList.add('is-glass'); }
   r.classList.add('intro');
@@ -881,6 +881,11 @@ body::before{
 }
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
 
+@media(max-width:800px){
+  .modal-bg{align-items:center;padding:12px;}
+  .modal{width:100%;max-height:calc(100vh - 24px);overflow-y:auto;padding:20px;}
+}
+
 /* ====== Responsive ====== */
 @media(max-width:800px){
   .app-layout{
@@ -1030,7 +1035,17 @@ body.dragging .drop-overlay{display:flex}
 .drop-card small{display:block;margin-top:10px;font-size:12px;font-weight:500;color:var(--text2)}
 
 @media(max-width:800px){
-  .theme-panel{width:min(330px,calc(100vw - 32px))}
+  .theme-panel{
+    position:fixed;
+    top:72px;
+    left:12px;
+    right:12px;
+    width:auto;
+    max-width:none;
+    max-height:calc(100vh - 96px);
+    overflow-y:auto;
+    transform-origin:top center;
+  }
   .menu-panel{right:auto;left:0;transform-origin:top left}
   #moreWrap .menu-panel,.note-actions .menu-panel{right:0;left:auto;transform-origin:top right}
   .list-tools{margin-left:auto}
@@ -2151,7 +2166,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
 <div class="modal-bg" id="catBg" onclick="if(event.target===this)closeCats()">
   <div class="modal">
     <h3>分类管理</h3>
-    <p class="modal-sub">可以改名、排序、增删分类。图标仅在糖果主题里显示。删除分类时，里面的世界书会自动归入列表里的第一个分类。</p>
+    <p class="modal-sub">可以改名、排序、增删分类。图标用于分类显示。删除分类时，里面的世界书会自动归入列表里的第一个分类。</p>
     <div id="catRows"></div>
     <button class="btn btn-ghost btn-sm" onclick="addCatRow()" style="margin-top:6px">+ 添加分类</button>
     <div class="modal-actions">
@@ -2410,7 +2425,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
         <p class="g-p">点右上角的小圆点打开外观面板：</p>
         <table class="g-table">
           <tr><td>玻璃</td><td>日 / 夜 / 跟随系统，可以设置一张背景图，会自动转成黑白。</td></tr>
-          <tr><td>糖果</td><td>草莓、薄荷、香芋、蜜桃、天空五种软萌配色。</td></tr>
+          
           <tr><td>字体</td><td>导入字体文件，或者填电脑里已有的字体名，分别用在界面、标题、正文。编辑区的字号和行距也能调。</td></tr>
           <tr><td>调节</td><td>玻璃的透明度、模糊、噪点，强调色，书页宽度，动画开关。</td></tr>
         </table>
@@ -2463,7 +2478,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
       <input class="cat-icon" id="ncIcon" maxlength="4" value="📖" title="图标（糖果主题显示）" onkeydown="if(event.key==='Enter')confirmNewCat()" autocomplete="off">
       <input class="cat-name" id="ncName" maxlength="20" placeholder="分类名称，例如：恋爱日常" onkeydown="if(event.key==='Enter')confirmNewCat()" autocomplete="off">
     </div>
-    <p class="modal-sub" style="margin:12px 0 0">图标只在糖果主题里显示。想改名、排序或删除分类，可以到「更多 → 分类管理」。</p>
+    <p class="modal-sub" style="margin:12px 0 0">图标用于分类显示。想改名、排序或删除分类，可以到「更多 → 分类管理」。</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeNewCat(true)">取消</button>
       <button class="btn btn-primary" onclick="confirmNewCat()">创建</button>
@@ -2507,18 +2522,8 @@ const THEMES = [
     pv:{bg:"linear-gradient(160deg,#F0F0F1,#D2D2D5)", card:"rgba(255,255,255,.75)", edge:"rgba(24,24,27,.14)", dot:"#1A1A1C", line:"rgba(24,24,27,.35)"}},
   {id:"glass-auto", group:"glass", name:"跟随系统", short:"自动", en:"Auto", icon:"🖥️",
     pv:{bg:"linear-gradient(115deg,#E9E9EA 50%,#111113 50%)", card:"rgba(128,128,134,.38)", edge:"rgba(128,128,134,.4)", dot:"#808086", line:"rgba(128,128,134,.7)"}},
-  {id:"strawberry", group:"candy", name:"草莓", short:"草莓", en:"Strawberry", icon:"🍓",
-    pv:{bg:"#fff5f5", card:"#ffffff", edge:"rgba(255,150,170,.45)", dot:"#ff7ea1", line:"#ffafc5"}},
-  {id:"mint", group:"candy", name:"薄荷", short:"薄荷", en:"Mint", icon:"🌿",
-    pv:{bg:"#f0faf5", card:"#ffffff", edge:"rgba(100,200,150,.45)", dot:"#5ccc94", line:"#8eddb5"}},
-  {id:"lavender", group:"candy", name:"香芋", short:"香芋", en:"Lavender", icon:"🌸",
-    pv:{bg:"#f5f0ff", card:"#ffffff", edge:"rgba(160,130,220,.45)", dot:"#a07adc", line:"#c4aef0"}},
-  {id:"peach", group:"candy", name:"蜜桃", short:"蜜桃", en:"Peach", icon:"🍑",
-    pv:{bg:"#fff8f0", card:"#ffffff", edge:"rgba(255,180,120,.45)", dot:"#ffa664", line:"#ffca98"}},
-  {id:"sky", group:"candy", name:"天空", short:"天空", en:"Sky", icon:"☁️",
-    pv:{bg:"#f0f7ff", card:"#ffffff", edge:"rgba(100,170,255,.45)", dot:"#60a5fa", line:"#93c5fd"}},
 ];
-const META_COLORS = {"glass-night":"#0B0B0D","glass-day":"#E4E4E5",strawberry:"#fff5f5",mint:"#f0faf5",lavender:"#f5f0ff",peach:"#fff8f0",sky:"#f0f7ff"};
+const META_COLORS = {"glass-night":"#0B0B0D","glass-day":"#E4E4E5"};
 let themePref = "glass-auto";
 let themeTab = "glass";
 
@@ -2539,7 +2544,7 @@ function setTheme(pref, silent) {
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", META_COLORS[r] || "#fff5f5");
   const emo = document.querySelector("#logo .emo");
-  if (emo) emo.textContent = t.group === "candy" ? t.icon : "🍰";
+  if (emo) emo.textContent = t.icon || "🍰";
   const lab = document.getElementById("themeBtnLabel");
   if (lab) lab.textContent = t.short;
   if (!silent) {
@@ -2554,7 +2559,7 @@ function setThemeTab(g) { themeTab = g; renderThemePanel(); }
 function renderThemePanel() {
   const el = document.getElementById("themePanel");
   if (!el) return;
-  const groups = [{id:"glass", name:"玻璃", en:"Glass"}, {id:"candy", name:"糖果", en:"Candy"}, {id:"type", name:"字体", en:"Type"}, {id:"tune", name:"调节", en:"Tune"}];
+  const groups = [{id:"glass", name:"玻璃", en:"Glass"}, {id:"type", name:"字体", en:"Type"}, {id:"tune", name:"调节", en:"Tune"}];
   const tabs = groups.map(g => `<button class="tp-tab${themeTab === g.id ? " active" : ""}" onclick="setThemeTab('${g.id}')">${g.name}<small>${g.en}</small></button>`).join("");
   const tiles = THEMES.filter(t => t.group === themeTab).map(t => `
     <button class="theme-tile${themePref === t.id ? " active" : ""}" onclick="setTheme('${t.id}')" title="${t.name}">
@@ -2571,7 +2576,7 @@ function renderThemePanel() {
          <div class="ty-row"><span>配色</span><div class="seg"><button class="seg-btn${tune.bgmono ? " on" : ""}" onclick="setBgMono(1)">黑白</button><button class="seg-btn${tune.bgmono ? "" : " on"}" onclick="setBgMono(0)">原色</button></div></div>
          <div class="ty-row"><span>背景模糊</span><input type="range" min="0" max="40" step="1" value="${tune.bgbl}" oninput="setTune('bgbl',this.value,'tvBgbl2','px')"><span class="ty-val" id="tvBgbl2">${tune.bgbl}px</span></div>
        </div>`
-    : `<p class="tp-hint">糖果主题保留了原来的软萌配色和弹跳动效，随时可以切回来。</p>`;
+    : `<p class="tp-hint">可在这里调整玻璃效果、字体与显示细节。</p>`;
   const keepScroll = el.scrollTop;
   el.innerHTML = themeTab === "type"
     ? `<div class="tp-tabs">${tabs}</div>${renderTypoTab()}`

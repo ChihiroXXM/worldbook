@@ -218,7 +218,7 @@ body::before{
 .header{
   position:sticky;top:0;z-index:100;
   background:rgba(255,255,255,.75);
-  backdrop-filter:blur(20px) saturate(1.4);
+  backdrop-filter:blur(20px) saturate(1.9);
   border-bottom:2px solid var(--border);
   padding:14px 24px;
   transition:background .5s,border-color .5s;
@@ -1054,42 +1054,42 @@ body.dragging .drop-overlay{display:flex}
 html[data-theme="glass-night"]{
   color-scheme:dark;
   --bg:#0B0B0D; --bg2:rgba(255,255,255,.06);
-  --card:rgba(255,255,255,calc(.07 * var(--gk,1))); --card-hover:rgba(255,255,255,calc(.12 * var(--gk,1)));
-  --border:rgba(255,255,255,.15); --border-strong:rgba(255,255,255,.34);
+  --card:rgba(255,255,255,calc(.045 * var(--gk,1))); --card-hover:rgba(255,255,255,calc(.09 * var(--gk,1)));
+  --border:rgba(255,255,255,.14); --border-strong:rgba(255,255,255,.34);
   --accent:#F2F2F3; --accent2:rgba(255,255,255,.34); --accent-glow:rgba(255,255,255,.08);
   --text:#F2F2F3; --text2:rgba(242,242,243,.64); --text3:rgba(242,242,243,.42);
   --success:#E8C872; --danger:#E58E8E;
   --shadow:0 10px 30px rgba(0,0,0,.28); --shadow-hover:0 18px 50px rgba(0,0,0,.40); --shadow-item:0 6px 16px rgba(0,0,0,.26); --shadow-item-hover:0 10px 22px rgba(0,0,0,.34); --cat-active-shadow:none;
   --note-bg:transparent; --note-line:transparent; --pin-color:#F2F2F3;
-  --glass-fill:rgba(255,255,255,calc(.07 * var(--gk,1))); --glass-fill-strong:rgba(255,255,255,calc(.13 * var(--gk,1))); --glass-blur:26px;
+  --glass-fill:rgba(255,255,255,calc(.045 * var(--gk,1))); --glass-fill-strong:rgba(255,255,255,calc(.10 * var(--gk,1))); --glass-blur:18px;
   --field-bg:rgba(0,0,0,.26); --field-hover:rgba(0,0,0,.38);
-  --sheen:rgba(255,255,255,.07); --edge:rgba(255,255,255,.26);
+  --sheen:rgba(255,255,255,.07); --edge:rgba(255,255,255,.34);
   --solid-bg:#F2F2F3; --solid-fg:#0B0B0D;
-  --modal-fill:rgba(32,32,35,.68); --scrim:rgba(0,0,0,.5); --panel-fill:rgba(34,34,37,.92); --toast-fill:rgba(46,46,50,.82);
+  --modal-fill:rgba(32,32,35,.42); --scrim:rgba(0,0,0,.5); --panel-fill:rgba(34,34,37,.62); --toast-fill:rgba(46,46,50,.55);
   --ring:rgba(255,255,255,.10); --warm-def:#F2F2F3; --warm-def-rgb:242,242,243; --warm-ink:#F2F2F3;
   --blob-1:rgba(255,255,255,.13); --blob-2:rgba(150,150,162,.20); --blob-3:rgba(255,255,255,.07);
-  --veil:rgba(0,0,0,.22); --noise-opacity:calc(.07 * var(--nk,1));
-  --img-filter:grayscale(1) brightness(calc(.52 * var(--bgk,1))) contrast(1.05) blur(var(--bgbl,2px));
+  --veil:rgba(0,0,0,.10); --noise-opacity:calc(.07 * var(--nk,1));
+  --img-filter:grayscale(var(--bgmono,1)) brightness(calc(.62 * var(--bgk,1))) contrast(1.05) blur(var(--bgbl,0px));
 }
 html[data-theme="glass-day"]{
   color-scheme:light;
   --bg:#E6E6E7; --bg2:rgba(24,24,27,.05);
-  --card:rgba(255,255,255,calc(.5 * var(--gk,1))); --card-hover:rgba(255,255,255,calc(.75 * var(--gk,1)));
+  --card:rgba(255,255,255,calc(.24 * var(--gk,1))); --card-hover:rgba(255,255,255,calc(.42 * var(--gk,1)));
   --border:rgba(24,24,27,.11); --border-strong:rgba(24,24,27,.30);
   --accent:#1A1A1C; --accent2:rgba(24,24,27,.30); --accent-glow:rgba(24,24,27,.06);
   --text:#1A1A1C; --text2:rgba(26,26,28,.62); --text3:rgba(26,26,28,.42);
   --success:#B8902B; --danger:#B84B4B;
   --shadow:0 10px 30px rgba(40,40,50,.10); --shadow-hover:0 18px 50px rgba(40,40,50,.16); --shadow-item:0 6px 16px rgba(40,40,50,.09); --shadow-item-hover:0 10px 22px rgba(40,40,50,.14); --cat-active-shadow:none;
   --note-bg:transparent; --note-line:transparent; --pin-color:#1A1A1C;
-  --glass-fill:rgba(255,255,255,calc(.46 * var(--gk,1))); --glass-fill-strong:rgba(255,255,255,calc(.74 * var(--gk,1))); --glass-blur:26px;
+  --glass-fill:rgba(255,255,255,calc(.22 * var(--gk,1))); --glass-fill-strong:rgba(255,255,255,calc(.46 * var(--gk,1))); --glass-blur:18px;
   --field-bg:rgba(255,255,255,.52); --field-hover:rgba(255,255,255,.80);
   --sheen:rgba(255,255,255,.5); --edge:rgba(255,255,255,.95);
   --solid-bg:#1A1A1C; --solid-fg:#F5F5F6;
-  --modal-fill:rgba(247,247,248,.76); --scrim:rgba(226,226,228,.48); --panel-fill:rgba(251,251,252,.93); --toast-fill:rgba(255,255,255,.84);
+  --modal-fill:rgba(247,247,248,.46); --scrim:rgba(226,226,228,.30); --panel-fill:rgba(251,251,252,.62); --toast-fill:rgba(255,255,255,.55);
   --ring:rgba(24,24,27,.08); --warm-ink:#1A1A1C;
   --blob-1:rgba(255,255,255,.95); --blob-2:rgba(168,168,176,.48); --blob-3:rgba(255,255,255,.70);
-  --veil:rgba(255,255,255,.16); --noise-opacity:calc(.09 * var(--nk,1));
-  --img-filter:grayscale(1) brightness(calc(1.02 * var(--bgk,1))) contrast(.9) blur(var(--bgbl,2px));
+  --veil:rgba(255,255,255,.06); --noise-opacity:calc(.09 * var(--nk,1));
+  --img-filter:grayscale(var(--bgmono,1)) brightness(calc(1.02 * var(--bgk,1))) contrast(.95) blur(var(--bgbl,0px));
 }
 
 html,body{transition:background-color .6s var(--ease),color .5s var(--ease)}
@@ -1106,15 +1106,78 @@ html[data-theme="glass-day"] .bg-default::after{opacity:1}
 .blob3{width:44vmax;height:44vmax;left:18vw;bottom:-24vmax;background:var(--blob-3);animation:blobA 42s ease-in-out infinite reverse}
 @keyframes blobA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vmax,4vmax) scale(1.08)}}
 @keyframes blobB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vmax,-3vmax) scale(1.06)}}
-.bg-image{position:absolute;inset:-20px;background-size:cover;background-position:center;opacity:0;filter:var(--img-filter);transition:opacity .6s ease,filter .7s var(--ease)}
+.bg-image{position:absolute;inset:calc(var(--bgbl,0px) * -2);background-size:cover;image-rendering:auto;background-position:center;opacity:0;filter:var(--img-filter);transition:opacity .6s ease,filter .7s var(--ease)}
 .bg-image.active{opacity:1}
 .bg-layer::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;opacity:var(--noise-opacity);
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1.2 -0.1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 .bg-layer::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background-color:var(--veil);transition:background-color .7s var(--ease)}
 
+
+/* ===== iOS 液态玻璃：渐变边缘光环 + 色散 + 环境色 ===== */
+:root{--ambient:150,150,158}
+html[data-theme="glass-day"]{--ambient:205,205,212}
+/* 大块玻璃：用 ::after 画 1px 渐变光环（亮—染环境色—透—染环境色—亮），再叠色散与投影 */
+html[data-theme^="glass"] :is(.filter-drawer,.batch-bar,.menu-panel,.modal,.toast,.qa-pop,.book-item){
+  border-color:transparent !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -1px 0 rgba(255,255,255,.10),
+    inset 1px 0 0 rgba(255,140,180,.10),
+    inset -1px 0 0 rgba(130,190,255,.14),
+    inset 0 0 26px rgba(var(--ambient),.07),
+    var(--shadow-glass,0 10px 30px -14px rgba(0,0,0,.38)) !important;
+}
+html[data-theme^="glass"] :is(.filter-drawer,.batch-bar,.menu-panel,.modal,.toast,.qa-pop,.book-item)::after{
+  content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:3;
+  background:linear-gradient(140deg,rgba(255,255,255,.62),rgba(var(--ambient),.38) 28%,rgba(255,255,255,.04) 52%,rgba(var(--ambient),.22) 78%,rgba(255,255,255,.30));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+}
+html[data-theme="glass-day"] :is(.filter-drawer,.batch-bar,.menu-panel,.modal,.toast,.qa-pop,.book-item){
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(255,255,255,.45),
+    inset 1px 0 0 rgba(255,140,180,.12),
+    inset -1px 0 0 rgba(130,190,255,.16),
+    inset 0 0 26px rgba(255,255,255,.20),
+    0 12px 30px -16px rgba(40,40,60,.30) !important;
+}
+html[data-theme="glass-day"] :is(.filter-drawer,.batch-bar,.menu-panel,.modal,.toast,.qa-pop,.book-item)::after{
+  background:linear-gradient(140deg,rgba(255,255,255,.95),rgba(var(--ambient),.40) 28%,rgba(255,255,255,.30) 52%,rgba(var(--ambient),.26) 78%,rgba(255,255,255,.80));
+}
+html[data-theme^="glass"] :is(.filter-drawer,.batch-bar,.menu-panel,.modal,.toast,.qa-pop) > *{position:relative;z-index:2}
+.filter-drawer,.batch-bar{position:relative}
+/* 小件（按钮 / 药丸 / 搜索框）画不了伪元素：用内阴影近似同样的高光与色散 */
+html[data-theme^="glass"] :is(.btn-ghost,.af-pill,.search-wrap input){
+  border-color:transparent !important;
+  box-shadow:
+    inset 0 1.5px 0 var(--edge),
+    inset 0 -1px 0 rgba(255,255,255,.10),
+    inset 1px 0 0 rgba(255,140,180,.10),
+    inset -1px 0 0 rgba(130,190,255,.14),
+    inset 0 0 18px rgba(var(--ambient),.06),
+    0 6px 20px -10px rgba(0,0,0,.25) !important;
+}
+html[data-theme="glass-day"] :is(.btn-ghost,.af-pill,.search-wrap input){
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(255,255,255,.45),
+    inset 1px 0 0 rgba(255,140,180,.12),
+    inset -1px 0 0 rgba(130,190,255,.16),
+    inset 0 0 18px rgba(255,255,255,.2),
+    0 6px 20px -12px rgba(40,40,60,.28) !important;
+}
+/* 玻璃里不再套玻璃：Safari 嵌套 backdrop-filter 会发灰。内层改用半透明填充 */
+html[data-theme^="glass"] :is(.modal,.filter-drawer,.batch-bar,.sticky-note,.menu-panel,.qa-pop,.toast) :is(.btn-ghost,.af-pill,input,select,textarea,.book-item){
+  -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+}
+html[data-theme="glass-night"] :is(.modal,.filter-drawer,.batch-bar,.sticky-note,.menu-panel) :is(.btn-ghost,.af-pill){background:rgba(255,255,255,.10)}
+html[data-theme="glass-day"] :is(.modal,.filter-drawer,.batch-bar,.sticky-note,.menu-panel) :is(.btn-ghost,.af-pill){background:rgba(255,255,255,.42)}
+/* 背景图原色模式：玻璃里的饱和度更足 */
+
 /* ---------- 顶栏 ---------- */
 html[data-theme^="glass"] .header{background:transparent;border-bottom:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:14px 28px}
-html[data-theme^="glass"] .header::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--glass-fill),transparent);border-bottom:1px solid var(--border);backdrop-filter:blur(26px) saturate(140%);-webkit-backdrop-filter:blur(26px) saturate(140%);transition:background .5s var(--ease),border-color .5s var(--ease)}
+html[data-theme^="glass"] .header::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--glass-fill),transparent);border-bottom:1px solid var(--border);backdrop-filter:blur(26px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(190%) brightness(1.06);transition:background .5s var(--ease),border-color .5s var(--ease)}
 html[data-theme^="glass"] .logo{font-family:var(--serif-cn);font-size:21px;font-weight:500;letter-spacing:.06em;color:var(--text);animation:none;display:flex;align-items:baseline;gap:12px}
 html[data-theme^="glass"] .logo:hover{animation:none}
 html[data-theme^="glass"] .logo sub{font-family:inherit;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--text3);opacity:1}
@@ -1153,7 +1216,7 @@ html[data-theme^="glass"] .search-kbd{display:block;position:absolute;right:14px
 html[data-theme^="glass"] .search-wrap input:focus ~ .search-kbd,html[data-theme^="glass"] .search-wrap input:not(:placeholder-shown) ~ .search-kbd{opacity:0}
 
 /* 菜单面板（玻璃） */
-html[data-theme^="glass"] .menu-panel{background:var(--panel-fill);border:1px solid var(--border);border-radius:22px;backdrop-filter:blur(30px) saturate(150%);-webkit-backdrop-filter:blur(30px) saturate(150%);box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);transition:opacity .3s var(--ease),transform .4s var(--ease),visibility 0s linear .35s}
+html[data-theme^="glass"] .menu-panel{background:var(--panel-fill);border:1px solid var(--border);border-radius:22px;backdrop-filter:blur(30px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(30px) saturate(190%) brightness(1.06);box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);transition:opacity .3s var(--ease),transform .4s var(--ease),visibility 0s linear .35s}
 html[data-theme^="glass"] .menu-item{font-weight:500;letter-spacing:.04em;border-radius:14px;padding:10px 14px}
 html[data-theme^="glass"] .menu-item:hover{background:var(--glass-fill-strong);color:var(--text)}
 html[data-theme^="glass"] .menu-item.danger{color:var(--danger)}
@@ -1173,7 +1236,7 @@ html[data-theme^="glass"] .app-layout{padding:26px 28px 70px;gap:28px}
 html[data-theme^="glass"] .left-panel{position:sticky;top:86px;align-self:flex-start;height:calc(100vh - 112px);gap:14px;min-height:0}
 
 /* 筛选抽屉 */
-html[data-theme^="glass"] .filter-drawer{border:1px solid var(--border);border-radius:28px;background:var(--glass-fill);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);backdrop-filter:blur(var(--glass-blur)) saturate(140%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(140%)}
+html[data-theme^="glass"] .filter-drawer{border:1px solid var(--border);border-radius:28px;background:var(--glass-fill);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06)}
 html[data-theme^="glass"] .filter-tabs{border-bottom:1px solid var(--border);padding:6px;gap:6px}
 html[data-theme^="glass"] .filter-tab{background:transparent;border-radius:999px;font-weight:500;letter-spacing:.08em;color:var(--text2);padding:10px 8px;transition:background-color .4s var(--ease),color .4s var(--ease)}
 html[data-theme^="glass"] .filter-tab:first-child,html[data-theme^="glass"] .filter-tab:last-child{border:none}
@@ -1206,7 +1269,7 @@ html[data-theme^="glass"] .book-list::-webkit-scrollbar-thumb:hover{background:v
 html[data-theme^="glass"] .book-item{
   padding:18px 20px 16px 26px;border-radius:26px;border:1px solid var(--border);background:var(--glass-fill);
   box-shadow:var(--shadow-item),inset 0 1px 0 var(--edge);
-  backdrop-filter:blur(var(--glass-blur)) saturate(140%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);
   animation:none;
   transition:background-color .45s var(--ease),border-color .45s var(--ease),box-shadow .45s var(--ease),transform .45s var(--ease);
 }
@@ -1231,7 +1294,7 @@ html[data-theme^="glass"] .right-panel{padding-top:0}
 html[data-theme^="glass"] .sticky-note{
   max-width:860px;border-radius:36px;border:1px solid var(--border);background:var(--glass-fill);
   box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);
-  backdrop-filter:blur(var(--glass-blur)) saturate(140%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);
   animation:noteSwap .6s var(--ease) backwards;
 }
 html[data-theme^="glass"] .sticky-note:hover{box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge)}
@@ -1284,7 +1347,7 @@ html[data-theme^="glass"] .editor-empty-hint{font-size:13px;letter-spacing:.08em
 /* ---------- 弹窗 / toast ---------- */
 html[data-theme^="glass"] .modal-bg{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
 html[data-theme^="glass"] .modal-bg::before{content:'';position:absolute;inset:0;background:var(--scrim);backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%)}
-html[data-theme^="glass"] .modal{position:relative;padding:38px;border-radius:34px;border:1px solid var(--border);background:var(--modal-fill);backdrop-filter:blur(34px) saturate(150%);-webkit-backdrop-filter:blur(34px) saturate(150%);box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);animation:modalIn .55s var(--ease)}
+html[data-theme^="glass"] .modal{position:relative;padding:38px;border-radius:34px;border:1px solid var(--border);background:var(--modal-fill);backdrop-filter:blur(34px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(34px) saturate(190%) brightness(1.06);box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);animation:modalIn .55s var(--ease)}
 @keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.965)}to{opacity:1;transform:none}}
 html[data-theme^="glass"] .modal h3{font-family:var(--serif-cn);font-size:24px;font-weight:500;letter-spacing:.05em;color:var(--text);margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
 html[data-theme^="glass"] .modal label{font-size:10.5px;font-weight:500;letter-spacing:.16em;color:var(--text3);margin-top:18px}
@@ -1296,7 +1359,7 @@ html[data-theme^="glass"] .modal .cat-row .cat-icon{border-radius:14px}
 html[data-theme^="glass"] .modal-sub{color:var(--text2)}
 html[data-theme^="glass"] .hist-item{border:1px solid var(--border);border-radius:20px;background:var(--field-bg)}
 html[data-theme^="glass"] .hist-pre{border:1px solid var(--border);border-radius:14px;background:var(--glass-fill)}
-html[data-theme^="glass"] .toast{background:var(--toast-fill);color:var(--text);border:1px solid var(--border);border-radius:999px;font-weight:500;letter-spacing:.05em;box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%)}
+html[data-theme^="glass"] .toast{background:var(--toast-fill);color:var(--text);border:1px solid var(--border);border-radius:999px;font-weight:500;letter-spacing:.05em;box-shadow:var(--shadow-hover),inset 0 1px 0 var(--edge);backdrop-filter:blur(22px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(22px) saturate(190%) brightness(1.06)}
 html[data-theme^="glass"] .toast.show{animation:toastIn .55s var(--ease) forwards}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(22px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 html[data-theme^="glass"] .drop-card{border-radius:36px;border:1px dashed var(--border-strong);background:var(--panel-fill);color:var(--text);font-family:var(--serif-cn);font-weight:500;letter-spacing:.06em}
@@ -1521,7 +1584,7 @@ html[data-theme^="glass"] .fr-row input:focus{border-color:var(--border-strong)}
 html[data-theme^="glass"] .fr-opt.on{background:var(--glass-fill-strong);color:var(--text);border-color:var(--border-strong)}
 html[data-theme^="glass"] .sec-view{border:1px solid var(--border);border-radius:24px;background:var(--field-bg);height:clamp(260px,calc(100vh - 500px),760px)}
 html[data-theme^="glass"] .sec-filter{background:transparent;border-radius:0;backdrop-filter:none;font-family:inherit}
-html[data-theme^="glass"] .batch-bar{border:1px solid var(--border);border-radius:24px;background:var(--glass-fill);box-shadow:var(--shadow-item),inset 0 1px 0 var(--edge);backdrop-filter:blur(var(--glass-blur)) saturate(140%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(140%)}
+html[data-theme^="glass"] .batch-bar{border:1px solid var(--border);border-radius:24px;background:var(--glass-fill);box-shadow:var(--shadow-item),inset 0 1px 0 var(--edge);backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(190%) brightness(1.06)}
 html[data-theme^="glass"] .bb-info b{font-family:var(--serif);font-weight:400;color:var(--text)}
 html[data-theme^="glass"] .bb-link{color:var(--text2)}
 html[data-theme^="glass"] .combo-row,html[data-theme^="glass"] .hist-diff{border-radius:16px;background:var(--field-bg)}
@@ -1781,7 +1844,7 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
     position:sticky;top:0;z-index:120;
     margin:0 -12px 12px;padding:calc(env(safe-area-inset-top,0px) + 4px) 14px 4px 4px;
     background:var(--panel-fill,var(--glass-fill,var(--card)));
-    backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);
+    backdrop-filter:blur(24px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(24px) saturate(190%) brightness(1.06);
     border-bottom:1px solid var(--border);
   }
   .m-back{
@@ -1897,6 +1960,39 @@ html:has(.modal-bg.show),html:has(.modal-bg.show) body{overflow:hidden}
 .fam-sug-row .fs-b{flex:1;min-width:0}
 .fam-sug-row .fs-b input{margin-bottom:6px}
 @media (max-width:800px){.ver-bar .vb-acts{width:100%}}
+
+/* ====== 长按快捷操作 ====== */
+.book-item{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.book-item.qa-hold{transform:scale(.982);transition:transform .35s var(--ease,ease)}
+.qa-mask{position:fixed;inset:0;z-index:940;background:transparent;display:none}
+.qa-mask.show{display:block}
+.qa-mask.sheet{background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.qa-pop{position:fixed;z-index:945;width:236px;max-height:min(78vh,560px);overflow-y:auto;padding:8px;border-radius:22px;
+  background:var(--panel-fill,var(--card));border:1px solid var(--border);color:var(--text);
+  -webkit-backdrop-filter:blur(30px) saturate(190%) brightness(1.06);backdrop-filter:blur(30px) saturate(190%) brightness(1.06);
+  box-shadow:var(--shadow-hover),inset 0 1.5px 0 var(--edge,rgba(255,255,255,.4));
+  opacity:0;transform:scale(.92);transform-origin:var(--qa-ox,top left);pointer-events:none;
+  transition:opacity .22s ease,transform .32s cubic-bezier(.22,1,.36,1);scrollbar-width:none}
+.qa-pop::-webkit-scrollbar{display:none}
+.qa-pop.show{opacity:1;transform:none;pointer-events:auto}
+.qa-head{padding:8px 12px 9px;margin-bottom:4px;border-bottom:1px solid var(--border)}
+.qa-head b{display:block;font-size:13px;font-weight:600;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qa-head span{display:block;margin-top:2px;font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qa-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:10px 12px;border:0;border-radius:14px;
+  background:transparent;color:var(--text);font:inherit;font-size:13px;letter-spacing:.04em;text-align:left;cursor:pointer;
+  transition:background-color .2s ease,transform .2s ease}
+.qa-item:hover{background:var(--card-hover,rgba(128,128,128,.14))}
+.qa-item:active{transform:scale(.97)}
+.qa-item small{font-size:11px;color:var(--text2);letter-spacing:0}
+.qa-item.danger{color:var(--danger)}
+.qa-item.on small{color:var(--accent)}
+.qa-sep{height:1px;margin:4px 8px;background:var(--border)}
+@media (max-width:700px){
+  .qa-pop{left:12px !important;right:12px;top:auto !important;bottom:max(12px,env(safe-area-inset-bottom));width:auto;max-height:86vh;border-radius:26px;
+    transform:translateY(30px) scale(.98);transform-origin:bottom center}
+  .qa-pop.show{transform:none}
+  .qa-item{padding:10px 14px;font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -2469,8 +2565,12 @@ function renderThemePanel() {
       <span class="tile-name">${t.name}</span><span class="tile-en">${t.en}</span>
     </button>`).join("");
   const extra = themeTab === "glass"
-    ? `<div class="bg-ctl"><div class="bg-ctl-label">背景图<small>自动转为黑白，夜间压暗</small></div>
-         <div class="bg-ctl-btns"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('bgFile').click()">选择图片</button><button class="btn btn-ghost btn-sm" onclick="clearBg()">清除</button></div></div>`
+    ? `<div class="bg-ctl"><div class="bg-ctl-label">背景图<small>原图高清导入，不压缩</small></div>
+         <div class="bg-ctl-btns"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('bgFile').click()">选择图片</button><button class="btn btn-ghost btn-sm" onclick="clearBg()">清除</button></div></div>
+       <div class="ty-sec" style="margin-top:10px">
+         <div class="ty-row"><span>配色</span><div class="seg"><button class="seg-btn${tune.bgmono ? " on" : ""}" onclick="setBgMono(1)">黑白</button><button class="seg-btn${tune.bgmono ? "" : " on"}" onclick="setBgMono(0)">原色</button></div></div>
+         <div class="ty-row"><span>背景模糊</span><input type="range" min="0" max="40" step="1" value="${tune.bgbl}" oninput="setTune('bgbl',this.value,'tvBgbl2','px')"><span class="ty-val" id="tvBgbl2">${tune.bgbl}px</span></div>
+       </div>`
     : `<p class="tp-hint">糖果主题保留了原来的软萌配色和弹跳动效，随时可以切回来。</p>`;
   const keepScroll = el.scrollTop;
   el.innerHTML = themeTab === "type"
@@ -2481,43 +2581,81 @@ function renderThemePanel() {
   el.scrollTop = keepScroll;
 }
 
-/* 背景图（仅玻璃主题显示） */
+/* 背景图（仅玻璃主题显示）：原图存 IndexedDB，不压缩、不缩放 */
 const BG_KEY = "wb_bg";
-function applyBg() {
+let bgUrl = "";
+function bgDB() {
+  return new Promise((res, rej) => {
+    const q = indexedDB.open("wb_assets", 1);
+    q.onupgradeneeded = () => q.result.createObjectStore("kv");
+    q.onsuccess = () => res(q.result);
+    q.onerror = () => rej(q.error);
+  });
+}
+async function bgGet() {
+  try { const db = await bgDB(); return await new Promise(r => { const q = db.transaction("kv").objectStore("kv").get("bg"); q.onsuccess = () => r(q.result || null); q.onerror = () => r(null); }); }
+  catch (e) { return null; }
+}
+async function bgPut(blob) {
+  const db = await bgDB();
+  return new Promise((res, rej) => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(blob, "bg"); t.oncomplete = res; t.onerror = () => rej(t.error); });
+}
+async function bgDel() {
+  try { const db = await bgDB(); await new Promise(r => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").delete("bg"); t.oncomplete = r; t.onerror = r; }); } catch (e) {}
+}
+async function applyBg() {
   const el = document.getElementById("bgImage");
   if (!el) return;
-  let d = null;
-  try { d = localStorage.getItem(BG_KEY); } catch (e) {}
-  if (d) { el.style.backgroundImage = `url("${d}")`; el.classList.add("active"); }
-  else { el.style.backgroundImage = ""; el.classList.remove("active"); }
+  let blob = await bgGet();
+  if (!blob) { /* 兼容旧版：localStorage 里的压缩图 */
+    let d = null; try { d = localStorage.getItem(BG_KEY); } catch (e) {}
+    if (d) { el.style.backgroundImage = `url("${d}")`; el.classList.add("active"); sampleAmbient(d); return; }
+  }
+  if (bgUrl) { URL.revokeObjectURL(bgUrl); bgUrl = ""; }
+  if (blob) { bgUrl = URL.createObjectURL(blob); el.style.backgroundImage = `url("${bgUrl}")`; el.classList.add("active"); sampleAmbient(bgUrl); }
+  else { el.style.backgroundImage = ""; el.classList.remove("active"); bgAmb = null; applyAmbient(); }
 }
-function importBg(file) {
-  if (!file || !/^image\//.test(file.type)) { showToast("⚠️ 请选择图片文件"); return; }
-  const reader = new FileReader();
-  reader.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      const tryStore = (max, q) => {
-        const s = Math.min(1, max / Math.max(img.width, img.height));
-        const c = document.createElement("canvas");
-        c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
-        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        const data = c.toDataURL("image/jpeg", q);
-        try { localStorage.setItem(BG_KEY, data); return true; } catch (e) { return false; }
-      };
-      if (tryStore(1920, 0.82) || tryStore(1280, 0.7) || tryStore(800, 0.6)) { applyBg(); showToast("🖼️ 背景已更换"); }
-      else showToast("⚠️ 图片太大，存不下，请换一张小一点的");
-    };
-    img.onerror = () => showToast("⚠️ 图片读取失败");
-    img.src = reader.result;
+/* 环境色：壁纸缩成 8×8 求平均色，写进 --ambient，玻璃边缘光环会染上这个颜色 */
+let bgAmb = null;
+function sampleAmbient(src) {
+  const im = new Image();
+  im.onload = () => {
+    try {
+      const c = document.createElement("canvas"); c.width = c.height = 8;
+      const x = c.getContext("2d", {willReadFrequently: true});
+      x.drawImage(im, 0, 0, 8, 8);
+      const d = x.getImageData(0, 0, 8, 8).data, sum = [0, 0, 0];
+      for (let i = 0; i < d.length; i += 4) { sum[0] += d[i]; sum[1] += d[i + 1]; sum[2] += d[i + 2]; }
+      bgAmb = sum.map(v => Math.round(v / (d.length / 4)));
+    } catch (e) { bgAmb = null; }
+    applyAmbient();
   };
-  reader.readAsDataURL(file);
+  im.onerror = () => { bgAmb = null; applyAmbient(); };
+  im.src = src;
 }
-function clearBg() {
+function applyAmbient() {
+  const r = document.documentElement;
+  if (!bgAmb) { r.style.removeProperty("--ambient"); return; }
+  let [R, G, B] = bgAmb;
+  if (tune.bgmono) { const g = Math.round(.299 * R + .587 * G + .114 * B); R = G = B = g; }  /* 黑白模式：环境色也是灰的 */
+  r.style.setProperty("--ambient", R + "," + G + "," + B);
+}
+async function importBg(file) {
+  if (!file || !/^image\//.test(file.type)) { showToast("⚠️ 请选择图片文件"); return; }
+  try {
+    await bgPut(file);               // 原文件，不重新编码
+    try { localStorage.removeItem(BG_KEY); } catch (e) {}
+    await applyBg();
+    showToast("🖼️ 背景已更换（原图高清）");
+  } catch (e) { showToast("⚠️ 浏览器存储空间不足，图片没存下"); }
+}
+async function clearBg() {
+  await bgDel();
   try { localStorage.removeItem(BG_KEY); } catch (e) {}
-  applyBg();
+  await applyBg();
   showToast("🖼️ 已恢复默认背景");
 }
+function setBgMono(v) { tune.bgmono = v; saveTune(); applyTune(); applyAmbient(); renderThemePanel(); }
 
 /* =====================================================================
    状态
@@ -2632,7 +2770,7 @@ function save(quiet) {
    每本书多两个字段：fam（组 id，空 = 单独一本）、famName（组标题，同组所有版本一致）
    ===================================================================== */
 const VTOK = /^(?:v|ver\.?|version)?\s*\.?\s*\d+(?:[.\-_]\d+)*[a-z]?$|^第?[0-9一二三四五六七八九十]+版$|^(?:修订|修正|终|最终|最新|旧|新|完整|精简|增强|测试|正式|预览|重制|优化|升级|更新)版?$|^(?:beta|alpha|final|new|old|fixed|revised|copy|副本)$|^新导入\s*\d*$|^(?:20)?\d{2}[-./年]\d{1,2}(?:[-./月]\d{1,2}日?)?$/i;
-/* 把「林间旅店 v2.1（新导入）」拆成 {base:"林间旅店", tag:"v2.1 新导入"} */
+/* 把「书名 v2.1（新导入）」拆成 {base:"书名", tag:"v2.1 新导入"} */
 function splitName(name) {
   let s = String(name || "").trim();
   const tags = [];
@@ -3168,7 +3306,7 @@ function renderBookList() {
       const all = famSorted(famOf(b)), shown = all.slice(-4), hidden = all.length - shown.length;
       vers = `<div class="book-item-vers">${hidden > 0 ? `<span class="bv more">+${hidden}</span>` : ""}${shown.map(m => `<span class="bv${m === b ? " on" : ""}" onclick="pickVerEv(event,'${escAttr(m.id)}')" title="${escAttr(m.name)}">${esc(verLabel(m, all))}</span>`).join("")}</div>`;
     }
-    return `<div class="book-item${sel}" style="--n:${i}" onclick="itemClick(${idx})">
+    return `<div class="book-item${sel}" data-id="${escAttr(b.id)}" style="--n:${i}" onclick="itemClick(${idx})">
       <span class="sel-box${checked ? " on" : ""}"></span>
       ${b.pinned ? '<span class="book-pin" title="已收藏"></span>' : ""}
       <div class="book-item-top">
@@ -4842,7 +4980,7 @@ function deleteCombo() {
    版面偏好：紧凑列表 / 左栏宽度 / 书页宽度 + 外观调节
    ===================================================================== */
 const TUNE_KEY = "wb_tune";
-const TUNE_DEF = {gk: 1, gb: 26, nk: 1, bgk: 1, bgbl: 2, warm: "#1A1A1C", motion: true, nw: "std", lw: 0};
+const TUNE_DEF = {gk: 1, gb: 18, nk: 1, bgk: 1, bgbl: 0, bgmono: 1, warm: "#1A1A1C", motion: true, nw: "std", lw: 0};
 let tune = Object.assign({}, TUNE_DEF);
 const WARMS = [["黑（默认）", "#1A1A1C"], ["红", "#D4888A"], ["橙", "#DDA27A"], ["黄", "#E0C377"], ["绿", "#96C29E"], ["青", "#84C0BF"], ["蓝", "#8DA9D6"], ["紫", "#AB9BD0"]];
 
@@ -4857,10 +4995,11 @@ function applyTune() {
   const r = document.documentElement;
   const set = (k, v, def) => { if (v === def) r.style.removeProperty(k); else r.style.setProperty(k, v); };
   set("--gk", String(tune.gk), "1");
-  set("--glass-blur", tune.gb + "px", "26px");
+  set("--glass-blur", tune.gb + "px", "18px");
   set("--nk", String(tune.nk), "1");
   set("--bgk", String(tune.bgk), "1");
-  set("--bgbl", tune.bgbl + "px", "2px");
+  set("--bgbl", tune.bgbl + "px", "0px");
+  set("--bgmono", String(tune.bgmono), "1");
   if (String(tune.warm).toLowerCase() === TUNE_DEF.warm.toLowerCase()) { r.style.removeProperty("--warm"); r.style.removeProperty("--warm-rgb"); r.style.removeProperty("--hl-a"); }
   else { r.style.setProperty("--warm", tune.warm); r.style.setProperty("--warm-rgb", hexRgb(tune.warm)); r.style.setProperty("--hl-a", ".38"); }
   r.classList.toggle("no-motion", !tune.motion);
@@ -4907,8 +5046,8 @@ function initResizer() {
 function setTune(k, v, labelId, kind) {
   tune[k] = Number(v);
   saveTune(); applyTune();
-  const el = document.getElementById(labelId);
-  if (el) el.textContent = kind === "px" ? tune[k] + "px" : Math.round(tune[k] * 100) + "%";
+  const txt = kind === "px" ? tune[k] + "px" : Math.round(tune[k] * 100) + "%";
+  [labelId, labelId === "tvBgbl2" ? "tvBgbl" : labelId === "tvBgbl" ? "tvBgbl2" : labelId].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = txt; });
 }
 function setWarm(c) { tune.warm = c; saveTune(); applyTune(); renderThemePanel(); }
 function setNW(v) { tune.nw = v; saveTune(); applyTune(); renderThemePanel(); }
@@ -4935,6 +5074,7 @@ function renderTuneTab() {
     </div>
     <div class="ty-sec">
       <div class="ty-head"><span>背景图</span><span style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('bgFile').click()">选择</button><button class="btn btn-ghost btn-sm" onclick="clearBg()">清除</button></span></div>
+      <div class="ty-row"><span>配色</span><div class="seg"><button class="seg-btn${tune.bgmono ? " on" : ""}" onclick="setBgMono(1)">黑白</button><button class="seg-btn${tune.bgmono ? "" : " on"}" onclick="setBgMono(0)">原色</button></div></div>
       <div class="ty-row"><span>亮度</span><input type="range" min="0.4" max="1.6" step="0.05" value="${tune.bgk}" oninput="setTune('bgk',this.value,'tvBgk','pct')"><span class="ty-val" id="tvBgk">${pct(tune.bgk)}</span></div>
       <div class="ty-row"><span>模糊</span><input type="range" min="0" max="24" step="1" value="${tune.bgbl}" oninput="setTune('bgbl',this.value,'tvBgbl','px')"><span class="ty-val" id="tvBgbl">${tune.bgbl}px</span></div>
     </div>
@@ -5522,6 +5662,146 @@ init();
 initTypo();
 initExtras();
 
+</script>
+
+<script>
+/* ====== 长按世界书：快捷操作弹窗 ====== */
+(function(){
+  var HOLD = 450, MOVE = 10;
+  var timer = 0, sx = 0, sy = 0, holdEl = null, suppressUntil = 0, curId = "";
+  var mask = document.createElement("div"); mask.className = "qa-mask";
+  var pop = document.createElement("div"); pop.className = "qa-pop"; pop.setAttribute("role", "menu");
+  document.body.appendChild(mask); document.body.appendChild(pop);
+
+  function bookIdx(){ for (var i = 0; i < books.length; i++) if (books[i].id === curId) return i; return -1; }
+  function clearHold(){ clearTimeout(timer); timer = 0; if (holdEl) { holdEl.classList.remove("qa-hold"); holdEl = null; } }
+  function close(){ mask.classList.remove("show", "sheet"); pop.classList.remove("show"); curId = ""; }
+  function isSheet(){ return window.innerWidth <= 700; }
+
+  function item(label, hint, fn, cls){
+    return {label: label, hint: hint || "", fn: fn, cls: cls || ""};
+  }
+  function build(){
+    var idx = bookIdx(); if (idx < 0) return null;
+    var b = books[idx];
+    var multi = b.fam && famOf(b).length > 1;
+    var rows = [
+      item("打开", "", function(){ selectBook(idx); }),
+      item("复制内容", fmt(b.content.length) + " 字", function(){ copyBook(idx); }),
+      item(b.pinned ? "取消收藏" : "收藏", "", function(){ togglePin(idx); }, b.pinned ? "on" : ""),
+      "sep",
+      item("编辑信息", "", function(){ editBook(idx); }),
+      item("移到分类…", catOf(b.cat).name, function(){ showCats(); }, "keep"),
+      item("加入套装", "", function(){
+        if (comboIds.indexOf(b.id) >= 0) { showToast("已经在套装里了"); return; }
+        comboAdd(b.id); showToast("✅ 已加入合并套装（共 " + comboIds.length + " 本）");
+      }),
+      item("多选", "", function(){ if (!selectMode) toggleSelectMode(); if (!selIds.has(b.id)) toggleSel(b.id); }),
+      "sep",
+      item("历史版本", "", function(){ openHistory(idx); }),
+      item("创建副本", "", function(){ duplicateBook(idx); }),
+      item("下载 .txt", "", function(){ downloadBook(idx); })
+    ];
+    if ((b.keywords || "").trim()) rows.splice(2, 0, item("复制关键词", "", function(){ copyKeywords(idx); }));
+    rows.push("sep", item(multi ? "删除此版本" : "删除", "移到回收站", function(){ deleteBook(idx); }, "danger"));
+    return {b: b, rows: rows};
+  }
+  function head(b){
+    return '<div class="qa-head"><b>' + esc(b.name) + '</b><span>' + esc(b.author || "未知") + ' · ' + esc(catOf(b.cat).name) + '</span></div>';
+  }
+  var actions = [];
+  function paint(html){ pop.innerHTML = html; }
+  function render(){
+    var d = build(); if (!d) { close(); return; }
+    actions = [];
+    var h = head(d.b);
+    d.rows.forEach(function(r){
+      if (r === "sep") { h += '<div class="qa-sep"></div>'; return; }
+      actions.push(r);
+      h += '<button class="qa-item ' + r.cls + '" data-a="' + (actions.length - 1) + '" role="menuitem"><span>' + esc(r.label) + '</span>' + (r.hint ? '<small>' + esc(r.hint) + '</small>' : '') + '</button>';
+    });
+    paint(h);
+  }
+  function showCats(){
+    var idx = bookIdx(); if (idx < 0) return;
+    var b = books[idx];
+    actions = [];
+    var h = head(b) + '<button class="qa-item" data-back="1"><span>‹ 返回</span></button><div class="qa-sep"></div>';
+    realCats().forEach(function(c){
+      actions.push({fn: function(){
+        famOf(b).forEach(function(x){ x.cat = c.id; });
+        save(); renderAll(); showToast("✅ 已移到「" + c.name + "」");
+      }});
+      h += '<button class="qa-item' + (c.id === b.cat ? ' on' : '') + '" data-a="' + (actions.length - 1) + '"><span>' + esc(c.name) + '</span>' + (c.id === b.cat ? '<small>当前</small>' : '') + '</button>';
+    });
+    paint(h);
+  }
+  function place(x, y){
+    if (isSheet()) { pop.style.left = pop.style.top = ""; return; }
+    var w = pop.offsetWidth, hgt = pop.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    var left = Math.min(Math.max(8, x), vw - w - 8);
+    var top = y + hgt + 8 > vh ? Math.max(8, y - hgt) : y;
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+    pop.style.setProperty("--qa-ox", (x > left + w / 2 ? "right" : "left") + " " + (top < y ? "bottom" : "top"));
+  }
+  function open(id, x, y){
+    curId = id; render(); if (!curId) return;
+    var sheet = isSheet();
+    mask.classList.add("show"); mask.classList.toggle("sheet", sheet);
+    pop.style.visibility = "hidden"; pop.classList.remove("show");
+    place(x, y);
+    pop.style.visibility = "";
+    requestAnimationFrame(function(){ pop.classList.add("show"); });
+    if (navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
+  }
+
+  pop.addEventListener("click", function(e){
+    var t = e.target.closest(".qa-item"); if (!t) return;
+    if (t.getAttribute("data-back")) { render(); return; }
+    var a = actions[+t.getAttribute("data-a")]; if (!a) return;
+    var keep = a.cls === "keep";
+    if (keep) { a.fn(); return; }
+    close();
+    a.fn();
+  });
+  mask.addEventListener("click", close);
+  mask.addEventListener("contextmenu", function(e){ e.preventDefault(); close(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && mask.classList.contains("show")) { e.stopPropagation(); close(); } }, true);
+  window.addEventListener("resize", close);
+  window.addEventListener("blur", clearHold);
+
+  function targetItem(e){ return e.target.closest ? e.target.closest(".book-item") : null; }
+  document.addEventListener("pointerdown", function(e){
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    var el = targetItem(e); if (!el || !el.closest("#bookList")) return;
+    clearHold();
+    sx = e.clientX; sy = e.clientY; holdEl = el;
+    el.classList.add("qa-hold");
+    var id = el.getAttribute("data-id");
+    timer = setTimeout(function(){
+      timer = 0; if (holdEl) { holdEl.classList.remove("qa-hold"); holdEl = null; }
+      suppressUntil = Date.now() + 600;
+      open(id, sx, sy);
+    }, HOLD);
+  }, true);
+  document.addEventListener("pointermove", function(e){
+    if (!timer) return;
+    if (Math.abs(e.clientX - sx) > MOVE || Math.abs(e.clientY - sy) > MOVE) clearHold();
+  }, true);
+  ["pointerup", "pointercancel", "pointerleave", "scroll"].forEach(function(n){ document.addEventListener(n, function(){ if (timer) clearHold(); else if (holdEl) clearHold(); }, true); });
+  /* 长按触发后，松手那一下不要当成「点击打开」 */
+  document.addEventListener("click", function(e){
+    if (Date.now() < suppressUntil && e.target.closest && e.target.closest("#bookList")) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
+  /* 桌面右键 / 部分手机长按系统菜单 */
+  document.addEventListener("contextmenu", function(e){
+    var el = targetItem(e); if (!el || !el.closest("#bookList")) return;
+    e.preventDefault();
+    if (mask.classList.contains("show")) return;
+    clearHold(); suppressUntil = Date.now() + 600;
+    open(el.getAttribute("data-id"), e.clientX, e.clientY);
+  });
+})();
 </script>
 </body>
 </html>
